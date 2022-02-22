@@ -86,7 +86,7 @@ function scene:create( event )
 					}
 
 					-- 시간제한 시작 --
-					timer.performWithDelay( 1000, shapeTimeAttack, 0 )
+					timer.performWithDelay( 1000, shapeTimeAttack, 0 , "shapeTimer")
 
 					-- 누름판 원위치 --
 					event.target.x = pressBoardX
@@ -135,6 +135,9 @@ function scene:create( event )
 				if(event.target.isFocus) then
 					if event.target.x < dalgona.x + 100 and event.target.x > dalgona.x - 100
 							and event.target.y < dalgona.y + 100 and event.target.y > dalgona.y - 100 then
+						-- 타이머 중지 --
+						timer.pause("shapeTimer")
+
 						if(dalgona.press) then -- 누르기 했음 --
 							if(dalgona.hard) then
 								 -- 누르고 시간이 지나 굳은 달고나 --
