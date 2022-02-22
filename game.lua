@@ -16,6 +16,14 @@ function scene:create( event )
 
 	sceneGroup:insert(background)
 
+	-- 브금 --
+	local soundFile = audio.loadSound("Content/Sound/BGM/Do Do Do - Silent Partner.mp3")
+	audio.play(soundFile, {
+		channel = 2,
+		loops = -1})
+	--audio.setVolume(0.5, {channel = 2})
+	audio.pause(2)
+
 	-- 국자 소환 --
 	--local ladle = display.newImage("Content/Image/MainGame/국자.png")
 	--ladle.x, ladle.y = display.contentWidth*0.5, display.contentHeight*0.5
@@ -77,7 +85,7 @@ function scene:create( event )
 			if(event.target.isFocus) then
 				if event.target.x < dalgona.x + 100 and event.target.x > dalgona.x - 100
 						and event.target.y < dalgona.y + 100 and event.target.y > dalgona.y - 100 then
-					
+
 					-- 달고나 눌러진 이미지로 변경 --
 					dalgona.press = true
 					dalgona.fill = {
