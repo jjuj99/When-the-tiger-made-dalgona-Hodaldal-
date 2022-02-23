@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------------------
 --
--- view1.lua
+-- game.lua
 --
 -----------------------------------------------------------------------------------------
 
@@ -19,10 +19,10 @@ function scene:create( event )
 	-- 브금 --
 	local soundFile = audio.loadSound("Content/Sound/BGM/Do Do Do - Silent Partner.mp3")
 	audio.play(soundFile, {
-		channel = 2,
+		channel = 1,
 		loops = -1})
 	--audio.setVolume(0.5, {channel = 2})
-	audio.pause(2)
+	audio.pause(1)
 
 	-- 국자 소환 --
 	--local ladle = display.newImage("Content/Image/MainGame/국자.png")
