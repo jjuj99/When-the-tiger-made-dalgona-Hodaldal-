@@ -16,87 +16,185 @@ function scene:create( event )
 
 	sceneGroup:insert(background)
 
+	-- 시작버튼 --
+	local startBtn = display.newImage("Content/Image/Start/시작버튼.png")
+	startBtn:translate(960, 880)
+
+	sceneGroup:insert(startBtn)
+
+	-- 도움말버튼 --
+	local helpBtn = display.newImage("Content/Image/Start/도움말 버튼.png")
+	helpBtn:translate(1700, 890)
+
+	sceneGroup:insert(helpBtn)
+
+	-- 스코어 --
+	local score = 0 		-- ???스코어의 의미??? --
+
+	-- 시작하기 --
+	local function start( event )
+		score = score + 1
+		if score == 1 then
+			composer.gotoScene("game")
+		end
+	end
+
+	startBtn:addEventListener("tap", start)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	-- 브금 --
 	local soundFile = audio.loadSound("Content/Sound/BGM/If I Had a Chicken - Kevin MacLeod.mp3")
 	audio.play(soundFile, {
 		channel = 1,
 		loops = -1})
+	local bgmOn = true
+
 	
-	--audio.pause(1)
+	
+	audio.pause(1)
 
-	-- 볼륨 조절 --
-	local volGroup = display.newGroup()
+	--local optionView = display.newImageRect("Content/Image/MainGame/테이블 배경.png", 700, 500)
+	--optionView.x, optionView.y = display.contentWidth*0.5, display.contentHeight*0.5
 
-	local vol = 4
-	local showVol = display.newText(volGroup, vol, display.contentWidth*0.1, display.contentHeight*0.2)
-	showVol:setFillColor(0)
-	showVol.size = 50
+	local optionBtn = display.newImageRect("Content/Image/MainGame/달고나 덩어리.png", 150, 150)
+	optionBtn.x, optionBtn.y = display.contentWidth*0.9, display.contentHeight*0.1
 
-	local l = "<"
-	local showL = display.newText(volGroup, l, display.contentWidth*0.05, display.contentHeight*0.2)
-	showL:setFillColor(0)
-	showL.size = 50
+	
 
-	local r = ">"
-	local showR = display.newText(volGroup, r, display.contentWidth*0.15, display.contentHeight*0.2)
-	showR:setFillColor(0)
-	showR.size = 50
+	local function option( event )
 
-	audio.setVolume(vol*0.1, {channel = 1})
+		local optionView = display.newImageRect("Content/Image/MainGame/테이블 배경.png", 700, 500)
+		optionView.x, optionView.y = display.contentWidth*0.5, display.contentHeight*0.5
 
-	local function volDown( event )
-		if(vol > 0) then
-			vol = vol - 1
-			showVol.text = vol
-			audio.setVolume(vol*0.1, {channel = 1})
-		end
-	end
+		sceneGroup:insert(optionView)
 
-	local function volUp( event )
-		if(vol < 10) then
-			vol = vol + 1
-			showVol.text = vol
-			audio.setVolume(vol*0.1, {channel = 1})
-		end
-	end
 
-	showL:addEventListener("tap", volDown)
-	showR:addEventListener("tap", volUp)
+			-- 볼륨 조절 --
 
-	local bgmCheck = display.newImage(volGroup, "Content/Image/MainGame/fish.png")
-	bgmCheck.x, bgmCheck.y = display.contentWidth*0.2, display.contentHeight*0.2
-	bgmCheck.on = true
-	bgmCheck.channel = 1
+		local volGroup = display.newGroup()
 
-	local function mute( event )
-		if(bgmCheck.on) then
-			audio.pause(1)
-			bgmCheck.on = false
-			bgmCheck.fill = {
-				type = "image",
-				filename = "Content/Image/MainGame/cat.png"
-			}
+		local bgmCheck
+
+		if (bgmOn) then
+			bgmCheck = display.newImage(volGroup, "Content/Image/MainGame/fish.png")
 		else
-			audio.resume()
-			bgmCheck.on = true
-			bgmCheck.fill = {
-				type = "image",
-				filename = "Content/Image/MainGame/fish.png"
-			}
-
+			bgmCheck = display.newImage(volGroup, "Content/Image/MainGame/cat.png")
 		end
+
+
+
+		bgmCheck.x, bgmCheck.y = display.contentWidth*0.7, display.contentHeight*0.5
+		--bgmCheck.on = true
+		bgmCheck.channel = 1
 		
+
+		local vol = 4
+		local showVol = display.newText(volGroup, vol, display.contentWidth*0.5, display.contentHeight*0.5)
+		showVol:setFillColor(0)
+		showVol.size = 50
+
+		local l = "<"
+		local showL = display.newText(volGroup, l, display.contentWidth*0.45, display.contentHeight*0.5)
+		showL:setFillColor(0)
+		showL.size = 50
+
+		local r = ">"
+		local showR = display.newText(volGroup, r, display.contentWidth*0.55, display.contentHeight*0.5)
+		showR:setFillColor(0)
+		showR.size = 50
+
+		audio.setVolume(vol*0.1, {channel = 1})
+
+		local function volDown( event )
+			if(vol > 0) then
+				vol = vol - 1
+				showVol.text = vol
+				audio.setVolume(vol*0.1, {channel = 1})
+			end
+		end
+
+		local function volUp( event )
+			if(vol < 10) then
+				vol = vol + 1
+				showVol.text = vol
+				audio.setVolume(vol*0.1, {channel = 1})
+			end
+		end
+
+		showL:addEventListener("tap", volDown)
+		showR:addEventListener("tap", volUp)
+
+		
+
+		local function mute( event )
+			if(bgmOn) then
+				audio.pause(1)
+				bgmOn = false
+				bgmCheck.fill = {
+					type = "image",
+					filename = "Content/Image/MainGame/cat.png"
+				}
+			else
+				audio.resume()
+				bgmOn = true
+				bgmCheck.fill = {
+					type = "image",
+					filename = "Content/Image/MainGame/fish.png"
+				}
+
+			end
+			
+		end
+
+		bgmCheck:addEventListener("tap", mute)
+
+		sceneGroup:insert(volGroup)
+
+
+
+
+
+		local function close( event )
+			display.remove(optionView)
+			optionView = nil
+
+			display.remove(volGroup)
+			volGroup = nil
+		end
+
+		optionView:addEventListener("tap", close)
+
+
+
+		--sceneGroup:insert(optionView)
 	end
 
-	bgmCheck:addEventListener("tap", mute)
+	sceneGroup:insert(optionBtn)
 
-	sceneGroup:insert(volGroup)
+	optionBtn:addEventListener("tap", option)
 
 
-	--local score = 0
-	--local showScore = display.newText(volGroup, score, display.contentWidth*0.2, display.contentHeight*0.2)
-	--showScore:setFillColor(0)
-	--showScore.size = 100
+
+
+
 
 end
 
