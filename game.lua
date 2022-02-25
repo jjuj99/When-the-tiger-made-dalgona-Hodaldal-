@@ -132,11 +132,10 @@ function scene:create( event )
 	chapstickX, chapstickY = display.contentWidth * 0.5, display.contentHeight * 0.165
 	chapstick.x, chapstick.y = chapstickX, chapstickY
 
-	chapstick.alpha = 0.5
-
 	local chapstickSoda = false --젓가락에 소다가 찍혔는지 판정하는 파라미터
 
 	sceneGroup: insert(chapstick)
+	chapstick:toBack()
 
 	-- 누름판 소환 --
 	local pressBoard = display.newImage("Content/Image/MainGame/누름판.png")
@@ -156,23 +155,6 @@ function scene:create( event )
 
 	-- *** 동작 *** --
 
-	--타이머 설정--
- 	local limit = 100
-	local showLimit = display.newText(limit, display.contentWidth*0.6, display.contentHeight*0.92) 
-	showLimit:setFillColor(0) 
-	showLimit.size = 80
-
-	sceneGroup:insert(showLimit)
-
-	local function timeAttack( event )
-		limit = limit -1
-		showLimit.text = limit
-		if(limit == 0) then
-			composer.setVariable("complete", false)
-			composer.gotoScene("end")
-		end
-	end
-	timer.performWithDelay( 1000, timeAttack, 0 )
 
 
 
@@ -201,6 +183,7 @@ function scene:create( event )
 						type = "image",
 						filename = "Content/Image/MainGame/국자 설탕.png"
 					}
+
 					local function timeAttack( event )
 						limit = limit -1
 
@@ -222,6 +205,10 @@ function scene:create( event )
 
 					end
 					timer.performWithDelay( 1000, timeAttack, 0 )
+					ladle1.fill = { 
+						type = "image",
+						filename = "Content/Image/MainGame/국자 설탕.png"
+					}
 
 					-- 설탕 원위치 --
 					event.target.x = sugarX
@@ -242,6 +229,7 @@ function scene:create( event )
 						type = "image",
 						filename = "Content/Image/MainGame/국자 설탕.png"
 					}
+
 					local function timeAttack( event )
 						limit = limit -1
 
@@ -260,10 +248,8 @@ function scene:create( event )
 								filename="Content/Image/MainGame/국자 설탕녹음.png"
 							}
 						end
-
 					end
 					timer.performWithDelay( 1000, timeAttack, 0 )
-
 
 					-- 설탕 원위치 --
 					event.target.x = sugarX
@@ -290,7 +276,6 @@ function scene:create( event )
 
 
 
-
 	--젓가락에 소다가 없을 때 실행되는, 소다 찍기 함수
 	local function pickSoda(event)
 		if chapstickSoda == false then
@@ -299,7 +284,7 @@ function scene:create( event )
 				display.getCurrentStage():setFocus( event.target )
 
 				event.target.isFocus = true
-				chapstick.alpha = 1
+				chapstick: toFront()
 
 			elseif(event.phase == "moved") then
 				if(event.target.isFocus) then
@@ -324,7 +309,7 @@ function scene:create( event )
 						--다른 곳에 젓가락을 놓으면 원래 자리로
 						event.target.x = chapstickX
 						event.target.y = chapstickY
-						chapstick.alpha = 0.5
+						chapstick:toBack()
 
 						print("False location")
 					end
@@ -338,6 +323,26 @@ function scene:create( event )
 	end
 	
 	chapstick: addEventListener("touch", pickSoda)
+
+	local sodaTime = 3
+	local function meltSoda(event)
+		if(sodaTime >= 0) then
+			sodaTime = sodaTime - 1
+
+			if(sodaTime == 2) then
+				ladle1.fill = {
+					type = "image",
+					filename = "Content/Image/MainGame/국자 달고나.png"
+				}
+
+			elseif(sodaTime == 0) then
+				ladle1.fill = {
+					type = "image",
+					filename = "Content/Image/MainGame/국자 달고나.png"
+				}
+			end
+		end
+	end
 
 	--젓가락에 소다가 묻었을 때만 실행되는 소다 투입 함수
 	local function putSoda(event)
@@ -355,6 +360,7 @@ function scene:create( event )
 
 			elseif (event.phase == "ended" or event.phase == "cancelled") then
 				if(event.target.isFocus) then
+					--국자1
 					if event.target.x < ladle1.x + 300 and event.target.x > ladle1.x - 300
 							and event.target.y < ladle1.y + 300 and event.target.y > ladle1.y - 300  and ladle1.sugar == true then
 					 	chapstickSoda = false
@@ -362,41 +368,39 @@ function scene:create( event )
 
 						print("Put soda")
 
+						-- 시간제한 시작 --
+						sodaTime = 3
+						timer.performWithDelay( 1000, meltSoda, 0 , "sodaTimer")
+
 						--소다 투입 후 젓가락 자리로
 						event.target.x = chapstickX
 						event.target.y = chapstickY
 
-						chapstick.alpha = 0.5
+						chapstick:toBack()
 						chapstick.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/젓가락.png"
 						}
-
-						ladle1.fill = {
-							type = "image",
-							filename = "Content/Image/MainGame/국자 달고나.png"
-						}
-
+					--국자2
 					elseif event.target.x < ladle2.x + 300 and event.target.x > ladle2.x - 300
-							and event.target.y < ladle2.y + 300 and event.target.y > ladle2.y - 300  and ladle2.sugar == true then
+						and event.target.y < ladle2.y + 300 and event.target.y > ladle2.y - 300  and ladle2.sugar == true then
 					 	chapstickSoda = false
 					 	ladle2.soda = true
 
 						print("Put soda")
 
+						-- 시간제한 시작 --
+						sodaTime = 3
+						timer.performWithDelay( 1000, meltSoda, 0 , "sodaTimer")
+
 						--소다 투입 후 젓가락 자리로
 						event.target.x = chapstickX
 						event.target.y = chapstickY
 
-						chapstick.alpha = 0.5
+						chapstick:toBack()
 						chapstick.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/젓가락.png"
-						}
-
-						ladle2.fill = {
-							type = "image",
-							filename = "Content/Image/MainGame/국자 달고나.png"
 						}
 
 					else
@@ -439,7 +443,7 @@ function scene:create( event )
 						event.target.soda = false
 						dalgona1.alpha = 1
 						event.target.sugar = false
-
+						timer.pause("sodaTimer")
 						print("달고나 놓기")
 
 						dalgona1.x, dalgona1.y = dalgona1.dalgonaX, dalgona1.dalgonaY
