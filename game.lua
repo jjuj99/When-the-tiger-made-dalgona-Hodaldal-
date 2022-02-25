@@ -19,10 +19,20 @@ function scene:create( event )
 	-- *** 도구 소환 *** --
 
 	--달고나판 소환 --
-	local plate = display.newImage("Content/Image/MainGame/달고나판.png")
-	plate.x, plate.y = display.contentWidth * 0.665, display.contentHeight * 0.63
+	--local plate = display.newImage("Content/Image/MainGame/달고나판.png")
+	--plate.x, plate.y = display.contentWidth * 0.665, display.contentHeight * 0.63
 
-	sceneGroup: insert(plate)
+	--sceneGroup: insert(plate)
+
+	local plates = display.newGroup()
+
+	local plate1 = display.newImage(plates, "Content/Image/MainGame/달고나판1.png")
+	plate1.x, plate1.y = display.contentWidth * 0.555, display.contentHeight * 0.63
+
+	local plate2 = display.newImage(plates, "Content/Image/MainGame/달고나판2.png")
+	plate2.x, plate2.y = display.contentWidth * 0.776, display.contentHeight * 0.63
+
+	sceneGroup:insert(plates)
 
 	-- 매대 소환--
 	local out = display.newImage("Content/Image/MainGame/매대.png")
@@ -81,6 +91,7 @@ function scene:create( event )
 	sceneGroup:insert(sugar)
 
 	-- 달고나 소환 --
+	--[[
 	local dalgona = display.newImage("Content/Image/MainGame/달고나 덩어리.png")
 	dalgonaX, dalgonaY = display.contentWidth * 0.558, display.contentHeight * 0.615
 	dalgona.x, dalgona.y = dalgonaX, dalgonaY
@@ -90,7 +101,31 @@ function scene:create( event )
 	dalgona.press = false
 	dalgona.hard = false
 
-	sceneGroup: insert(dalgona)
+	sceneGroup: insert(dalgona) ]]--
+
+	local dalgona1 = display.newImage("Content/Image/MainGame/달고나 덩어리.png")
+	dalgona1.dalgonaX, dalgona1.dalgonaY = display.contentWidth * 0.558, display.contentHeight * 0.615
+	dalgona1.x, dalgona1.y = dalgona1.dalgonaX, dalgona1.dalgonaY
+
+	dalgona1.alpha = 0
+
+	dalgona1.press = false
+	dalgona1.hard = false
+
+	sceneGroup: insert(dalgona1)
+
+	local dalgona2 = display.newImage("Content/Image/MainGame/달고나 덩어리.png")
+	dalgona2.dalgonaX, dalgona2.dalgonaY = display.contentWidth * 0.77, display.contentHeight * 0.615
+	dalgona2.x, dalgona2.y = dalgona2.dalgonaX, dalgona2.dalgonaY
+
+	dalgona2.alpha = 0
+
+	dalgona2.press = false
+	dalgona2.hard = false
+
+	sceneGroup: insert(dalgona2)
+
+
 
 	-- 젓가락 소환 --
 	local chapstick = display.newImage("Content/Image/MainGame/젓가락.png")
@@ -120,8 +155,6 @@ function scene:create( event )
 
 
 	-- *** 동작 *** --
-
-
 
 
 
@@ -316,7 +349,7 @@ function scene:create( event )
 	
 	chapstick: addEventListener("touch", putSoda)
 
-	-- 국자의 달고나를 판 왼쪽에 올리는 함수 --
+	-- 국자의 달고나를 판에 올리는 함수 --
 	local function settingD(event)
 		if event.target.soda == true then
 			if(event.phase == "began") then
@@ -334,17 +367,40 @@ function scene:create( event )
 				if(event.target.isFocus) then
 					--판 위에 올렸을 때 왼쪽 판 위로 올라감.
 					--판정 범위 수정하여 왼쪽 판, 오른쪽 판 달고나 put 분리
-					if event.target.x < plate.x + 1000 and event.target.x > plate.x - 1000
-						and event.target.y < plate.y + 1000 and event.target.y > plate.y - 1000 then
+					if event.target.x < plate1.x + 100 and event.target.x > plate1.x - 100
+						and event.target.y < plate1.y + 100 and event.target.y > plate1.y - 100 then
 						event.target.soda = false
-						dalgona.alpha = 1
+						dalgona1.alpha = 1
 						event.target.sugar = false
 
 						print("달고나 놓기")
 
-						dalgona.x, dalgona.y = dalgonaX, dalgonaY
+						dalgona1.x, dalgona1.y = dalgona1.dalgonaX, dalgona1.dalgonaY
 
-						dalgona.fill = {
+						dalgona1.fill = {
+							type = "image",
+							filename = "Content/Image/MainGame/달고나 덩어리.png"
+						}
+
+						event.target.fill = {
+							type = "image",
+							filename = "Content/Image/MainGame/국자.png"
+						}
+						--이후 코드 보고 수정
+
+						event.target.x = event.target.ladleX
+						event.target.y = event.target.ladleY
+					elseif event.target.x < plate2.x + 100 and event.target.x > plate2.x - 100
+						and event.target.y < plate2.y + 100 and event.target.y > plate2.y - 100 then
+						event.target.soda = false
+						dalgona2.alpha = 1
+						event.target.sugar = false
+
+						print("달고나 놓기2")
+
+						dalgona2.x, dalgona2.y = dalgona2.dalgonaX, dalgona2.dalgonaY
+
+						dalgona2.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나 덩어리.png"
 						}
@@ -365,6 +421,10 @@ function scene:create( event )
 					display.getCurrentStage():setFocus(nil)
 					event.target.isFocus = false
 				end
+
+				event.target.x = event.target.ladleX
+				event.target.y = event.target.ladleY
+
 				display.getCurrentStage():setFocus(nil)
 				event.target.isFocus = false
 			end
@@ -388,6 +448,10 @@ function scene:create( event )
 					display.getCurrentStage():setFocus(nil)
 					event.target.isFocus = false
 				end
+
+				event.target.x = event.target.ladleX
+				event.target.y = event.target.ladleY
+				
 				display.getCurrentStage():setFocus(nil)
 				event.target.isFocus = false
 			end
@@ -396,6 +460,8 @@ function scene:create( event )
 
 	ladle1: addEventListener("touch", settingD)
 	ladle2: addEventListener("touch", settingD)
+
+
 	--ladle2 함수 분리
 	--ladle2: addEventListener("touch", settingD)
 
@@ -439,20 +505,42 @@ function scene:create( event )
 	
 
 	-- 누르고 다서 모양틀 전까지 시간 제한 --
-	local shapeLimit = 3
-	local showShapeLimit = display.newText(shapeLimit, display.contentWidth*0.3, display.contentHeight*0.3)
-	showShapeLimit:setFillColor(0)
-	showShapeLimit.size = 100
+	local shapeLimit1 = 3
+	local showShapeLimit1 = display.newText(shapeLimit1, display.contentWidth*0.3, display.contentHeight*0.3)
+	showShapeLimit1:setFillColor(0)
+	showShapeLimit1.size = 100
 
-	local function shapeTimeAttack( event )
-		if(shapeLimit >= 0) then
-			shapeLimit = shapeLimit - 1
-			showShapeLimit.text = shapeLimit
+	local shapeLimit2 = 3
+	local showShapeLimit2 = display.newText(shapeLimit1, display.contentWidth*0.7, display.contentHeight*0.3)
+	showShapeLimit2:setFillColor(0)
+	showShapeLimit2.size = 100
 
-			if(shapeLimit == 0) then
+
+	local function shapeTimeAttack1( event )
+		if(shapeLimit1 >= 0) then
+			shapeLimit1 = shapeLimit1 - 1
+			showShapeLimit1.text = shapeLimit1
+
+			if(shapeLimit1 == 0) then
 				-- 시간 경과하면 단단해진 달고나로 --
-				dalgona.hard = true
-				dalgona.fill = {
+				dalgona1.hard = true
+				dalgona1.fill = {
+					type = "image",
+					filename = "Content/Image/MainGame/달고나 너무 굳은.png"
+				}
+			end
+		end
+	end
+
+	local function shapeTimeAttack2( event )
+		if(shapeLimit2 >= 0) then
+			shapeLimit2 = shapeLimit2 - 1
+			showShapeLimit2.text = shapeLimit2
+
+			if(shapeLimit2 == 0) then
+				-- 시간 경과하면 단단해진 달고나로 --
+				dalgona2.hard = true
+				dalgona2.fill = {
 					type = "image",
 					filename = "Content/Image/MainGame/달고나 너무 굳은.png"
 				}
@@ -474,19 +562,36 @@ function scene:create( event )
 
 		elseif( event.phase == "ended" or event.phase == "cancelled" ) then
 			if(event.target.isFocus) then
-				if event.target.x < dalgona.x + 100 and event.target.x > dalgona.x - 100
-						and event.target.y < dalgona.y + 100 and event.target.y > dalgona.y - 100 then
+				if event.target.x < dalgona1.x + 100 and event.target.x > dalgona1.x - 100
+						and event.target.y < dalgona1.y + 100 and event.target.y > dalgona1.y - 100 then
 
 					-- 달고나 눌러진 이미지로 변경 --
-					dalgona.press = true
-					dalgona.fill = {
+					dalgona1.press = true
+					dalgona1.fill = {
 						type="image",
 						filename="Content/Image/MainGame/달고나 누름.png"
 					}
 
 					-- 시간제한 시작 --
-					shapeLimit = 3
-					timer.performWithDelay( 1000, shapeTimeAttack, 0 , "shapeTimer")
+					shapeLimit1 = 3
+					timer.performWithDelay( 1000, shapeTimeAttack1, 0 , "shapeTimer1")
+
+					-- 누름판 원위치 --
+					event.target.x = pressBoardX
+					event.target.y = pressBoardyY
+				elseif event.target.x < dalgona2.x + 100 and event.target.x > dalgona2.x - 100
+						and event.target.y < dalgona2.y + 100 and event.target.y > dalgona2.y - 100 then
+
+					-- 달고나 눌러진 이미지로 변경 --
+					dalgona2.press = true
+					dalgona2.fill = {
+						type="image",
+						filename="Content/Image/MainGame/달고나 누름.png"
+					}
+
+					-- 시간제한 시작 --
+					shapeLimit2 = 3
+					timer.performWithDelay( 1000, shapeTimeAttack2, 0 , "shapeTimer2")
 
 					-- 누름판 원위치 --
 					event.target.x = pressBoardX
@@ -507,12 +612,11 @@ function scene:create( event )
 
 	pressBoard:addEventListener("touch", catchPressBoard)
 
+	sceneGroup:insert(showShapeLimit1)
 
-	sceneGroup:insert(showShapeLimit)
 
 	-- 모양틀 --
 
-	
 
 	-- 모양틀 누르기 --
 	local function catchShpeFrame( event )
@@ -528,22 +632,23 @@ function scene:create( event )
 
 		elseif( event.phase == "ended" or event.phase == "cancelled" ) then
 			if(event.target.isFocus) then
-				if event.target.x < dalgona.x + 100 and event.target.x > dalgona.x - 100
-						and event.target.y < dalgona.y + 100 and event.target.y > dalgona.y - 100 then
-					-- 타이머 중지 --
-					timer.pause("shapeTimer")
+				if event.target.x < dalgona1.x + 100 and event.target.x > dalgona1.x - 100
+						and event.target.y < dalgona1.y + 100 and event.target.y > dalgona1.y - 100 then
 
-					if(dalgona.press) then -- 누르기 했음 --
-						if(dalgona.hard) then
+					-- 타이머 중지 --
+					timer.pause("shapeTimer1")
+
+					if(dalgona1.press) then -- 누르기 했음 --
+						if(dalgona1.hard) then
 							 -- 누르고 시간이 지나 굳은 달고나에 모양틀 --
-							dalgona.fill = {
+							dalgona1.fill = {
 								type="image",
 								filename="Content/Image/MainGame/달고나 깨짐.png"
 							}
 
 						else
 							-- 달고나 눌러진 이미지로 변경 --
-						dalgona.fill = {
+						dalgona1.fill = {
 							type="image",
 							filename="Content/Image/MainGame/달고나 완성.png"
 						}
@@ -551,7 +656,40 @@ function scene:create( event )
 						end
 					else -- 누르기 안함 --
 						-- 누르기 전에 모양틀을 눌러 엉망이 된 모습 --
-						dalgona.fill = {
+						dalgona1.fill = {
+							type="image",
+							filename="Content/Image/MainGame/달고나덩어리 모양틀.png"
+							}
+					end
+
+					-- 누름판 원위치 --
+					event.target.x = shapeFrameX
+					event.target.y = shapeFrameY
+				elseif event.target.x < dalgona2.x + 100 and event.target.x > dalgona2.x - 100
+						and event.target.y < dalgona2.y + 100 and event.target.y > dalgona2.y - 100 then
+
+					-- 타이머 중지 --
+					timer.pause("shapeTimer2")
+
+					if(dalgona2.press) then -- 누르기 했음 --
+						if(dalgona2.hard) then
+							 -- 누르고 시간이 지나 굳은 달고나에 모양틀 --
+							dalgona2.fill = {
+								type="image",
+								filename="Content/Image/MainGame/달고나 깨짐.png"
+							}
+
+						else
+							-- 달고나 눌러진 이미지로 변경 --
+						dalgona2.fill = {
+							type="image",
+							filename="Content/Image/MainGame/달고나 완성.png"
+						}
+
+						end
+					else -- 누르기 안함 --
+						-- 누르기 전에 모양틀을 눌러 엉망이 된 모습 --
+						dalgona2.fill = {
 							type="image",
 							filename="Content/Image/MainGame/달고나덩어리 모양틀.png"
 							}
@@ -599,11 +737,11 @@ function scene:create( event )
 
 					event.target.alpha = 0
 
-					event.target.x=dalgonaX
-					event.target.y=dalgonaY
+					event.target.x=event.target.dalgonaX
+					event.target.y=event.target.dalgonaY
 				else
-					event.target.x=dalgonaX
-					event.target.y=dalgonaY
+					event.target.x=event.target.dalgonaX
+					event.target.y=event.target.dalgonaY
 					
 				end
 				display.getCurrentStage():setFocus( nil )
@@ -615,14 +753,8 @@ function scene:create( event )
 	end
 
 
-	dalgona:addEventListener("touch",sale)
-
-
-
-
-
-
-
+	dalgona1:addEventListener("touch",sale)
+	dalgona2:addEventListener("touch",sale)
 
 
 
