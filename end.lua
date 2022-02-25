@@ -42,9 +42,10 @@ function scene:create( event )
 			if(event.target.isFocus) then
 				if event.target.x<out.x+100 and event.target.x>out.x-100
 					and event.target.y<out.y+100 and event.target.y>out.y-100 then
-							
+					
+					composer.setVariable(flag1)
 					display.remove(event.target)
-					--composer.gotoScene("veiw2", "fade")
+					--composer.gotoScene("veiw2")
 				end
 			else
 				event.target.x=event.xStart
@@ -54,6 +55,7 @@ function scene:create( event )
 	end
 	dalgona1:addEventListener("touch",catch)
 
+	--flag1 = 0
 	--달고나2제출 후 엔딩씬
 	local function catch( event )
 		if ( event.phase == "began") then
@@ -70,7 +72,8 @@ function scene:create( event )
 					and event.target.y<out.y+100 and event.target.y>out.y-100 then
 							
 					display.remove(event.target)
-					composer.gotoScene("view2", "fade")
+					composer.setVariable(flag2)
+					composer.gotoScene("view2")
 				end
 			else
 				event.target.x=event.xStart
