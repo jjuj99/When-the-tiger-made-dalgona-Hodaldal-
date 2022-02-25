@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------------------
 --
--- view1.lua
+-- end.lua
 --
 -----------------------------------------------------------------------------------------
 
@@ -10,87 +10,65 @@ local scene = composer.newScene()
 function scene:create( event )
 	local sceneGroup = self.view
 
-	local background = display.newImage("image/main.png" , display.contentWidth/2, display.contentHeight/2)
-	background.width = display.contentWidth
-	background.height = display.contentHeight
 	
-	--매대--
-	local out = display.newImage("image/out.png", 1215, 360)
-	out.width = 132
-	out.height = 725
+local composer = require( "composer" )
+local scene = composer.newScene()
 
-	--달고나1--
-	local dalgona1 = display.newImage("image/dalgona.png", 720, 450)
-	dalgona1.width = 250
-	dalgona1.height = 250
-	--달고나2
-	local dalgona2 = display.newImage("image/dalgona.png", 988, 450)
-	dalgona2.width = 250
-	dalgona2.height = 250
+function scene:create( event )
+	local sceneGroup = self.view
+
+	--배경
+	local background = display.newRect( display.contentWidth/2, display.contentHeight/2, display.contentWidth, display.contentHeight)
+
+	--성공 또는 실패
+	if(flag1== 0 and flag2==0) then
+		local win = display.newImage("image/성공 배경.png", display.contentWidth/2, display.contentHeight/2)
+		win.width = display.contentWidth
+		win.height = display.contentHeight
+
+	else
+		local fail = display.newImage("Image/실패 배경.png" , display.contentWidth/2, display.contentHeight/2)
+		fail.width = display.contentWidth
+		fail.height = display.contentHeight
+	end
+		
+	--점수
+	local score = 123456
+	local showScore = display.newText(score, display.contentWidth*0.8, display.contentHeight*0.66)
+	showScore:setFillColor(0)
+	showScore.size = 45
+
+	--재시작
+	local retry = display.newImage("Image/retry.png" , display.contentWidth*0.77, display.contentHeight*0.83)
+
+	local function re(event)
+		--composer.gotoScene("")  --여기에 넣기
+	end
+	retry:addEventListener("tap", re)
 	
-	--달고나1제출
-	local function catch( event )
-		if ( event.phase == "began") then
-			display.getCurrentStage():setFocus( event.target )
-			event.target.isFocus = true
-		elseif(event.phase == "moved") then
-			if(event.target.isFocus) then
-				event.target.x = event.xStart + event.xDelta
-				event.target.y = event.yStart + event.yDelta
-			end
-		elseif (event.phase == "ended" or event.phase == "cancelled") then		
-			if(event.target.isFocus) then
-				if event.target.x<out.x+100 and event.target.x>out.x-100
-					and event.target.y<out.y+100 and event.target.y>out.y-100 then
-					
-					composer.setVariable(flag1)
-					display.remove(event.target)
-					--composer.gotoScene("veiw2")
-				end
-			else
-				event.target.x=event.xStart
-				event.target.y=event.yStart
-			end
-		end
-	end
-	dalgona1:addEventListener("touch",catch)
+	
+	-- create some text
+	local title = display.newText( "Second View", display.contentCenterX, 125, native.systemFont, 32 )
+	title:setFillColor( 0 )	-- black
 
-	--flag1 = 0
-	--달고나2제출 후 엔딩씬
-	local function catch( event )
-		if ( event.phase == "began") then
-			display.getCurrentStage():setFocus( event.target )
-			event.target.isFocus = true
-		elseif(event.phase == "moved") then
-			if(event.target.isFocus) then
-				event.target.x = event.xStart + event.xDelta
-				event.target.y = event.yStart + event.yDelta
-			end
-		elseif (event.phase == "ended" or event.phase == "cancelled") then		
-			if(event.target.isFocus) then
-				if event.target.x<out.x+100 and event.target.x>out.x-100
-					and event.target.y<out.y+100 and event.target.y>out.y-100 then
-							
-					display.remove(event.target)
-					composer.setVariable(flag2)
-					composer.gotoScene("view2")
-				end
-			else
-				event.target.x=event.xStart
-				event.target.y=event.yStart
-			end
-		end
-	end
-	dalgona2:addEventListener("touch",catch)
+	local newTextParams = { text = "Loaded by the second tab's\n\"onPress\" listener\nspecified in the 'tabButtons' table", 
+							x = display.contentCenterX + 10, 
+							y = title.y + 215, 
+							width = 310, 
+							height = 310, 
+							font = native.systemFont, 
+							fontSize = 14, 
+							align = "center" }
+	local summary = display.newText( newTextParams )
+	summary:setFillColor( 0 ) -- black
+	
+	-- all objects must be added to group (e.g. self.view)
+	sceneGroup:insert( background )
+	sceneGroup:insert( title )
+	sceneGroup:insert( summary )
 
-	sceneGroup:insert(background)
-	sceneGroup:insert(out)
-	sceneGroup:insert(dalgona1)
-	sceneGroup:insert(dalgona2)
+
 end
-
-
-
 
 function scene:show( event )
 	local sceneGroup = self.view
