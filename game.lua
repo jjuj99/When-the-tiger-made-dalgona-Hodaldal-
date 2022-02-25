@@ -19,10 +19,15 @@ function scene:create( event )
 	-- *** 도구 소환 *** --
 
 	--달고나판 소환 --
-	local plate = display.newImage("Content/Image/MainGame/달고나판.png")
-	plate.x, plate.y = display.contentWidth * 0.722, display.contentHeight * 0.465
+	local plates = display.newGroup()
 
-	sceneGroup: insert(plate)
+	local plate1 = display.newImage(plates, "Content/Image/MainGame/달고나판1.png")
+	plate1.x, plate1.y = display.contentWidth * 0.555, display.contentHeight * 0.63
+
+	local plate2 = display.newImage(plates, "Content/Image/MainGame/달고나판2.png")
+	plate2.x, plate2.y = display.contentWidth * 0.776, display.contentHeight * 0.63
+
+	sceneGroup:insert(plates)
 
 	-- 매대 소환--
 	local out = display.newImage("Content/Image/MainGame/매대.png")
