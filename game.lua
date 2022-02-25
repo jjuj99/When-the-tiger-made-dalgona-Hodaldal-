@@ -20,7 +20,7 @@ function scene:create( event )
 
 	--달고나판 소환 --
 	local plate = display.newImage("Content/Image/MainGame/달고나판.png")
-	plate.x, plate.y = display.contentWidth * 0.722, display.contentHeight * 0.465
+	plate.x, plate.y = display.contentWidth * 0.665, display.contentHeight * 0.63
 
 	sceneGroup: insert(plate)
 
@@ -454,7 +454,7 @@ function scene:create( event )
 				dalgona.hard = true
 				dalgona.fill = {
 					type = "image",
-					filename = "Content/Image/MainGame/누른 달고나 굳음.png"
+					filename = "Content/Image/MainGame/달고나 너무 굳은.png"
 				}
 			end
 		end
@@ -538,7 +538,7 @@ function scene:create( event )
 							 -- 누르고 시간이 지나 굳은 달고나에 모양틀 --
 							dalgona.fill = {
 								type="image",
-								filename="Content/Image/MainGame/모양틀에 깨진 달고나.png"
+								filename="Content/Image/MainGame/달고나 깨짐.png"
 							}
 
 						else
@@ -553,7 +553,7 @@ function scene:create( event )
 						-- 누르기 전에 모양틀을 눌러 엉망이 된 모습 --
 						dalgona.fill = {
 							type="image",
-							filename="Content/Image/MainGame/달고나 덩어리에 모양틀.png"
+							filename="Content/Image/MainGame/달고나덩어리 모양틀.png"
 							}
 					end
 
