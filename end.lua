@@ -27,7 +27,7 @@ function scene:create( event )
 		win.height = display.contentHeight
 
 	else
-		local fail = display.newImage("Image/실패 배경.png" , display.contentWidth/2, display.contentHeight/2)
+		local fail = display.newImage("image/실패 배경.png" , display.contentWidth/2, display.contentHeight/2)
 		fail.width = display.contentWidth
 		fail.height = display.contentHeight
 	end
@@ -39,7 +39,7 @@ function scene:create( event )
 	showScore.size = 45
 
 	--재시작
-	local retry = display.newImage("Image/재시작버튼.png" , display.contentWidth*0.77, display.contentHeight*0.83)
+	local retry = display.newImage("image/재시작버튼.png" , display.contentWidth*0.77, display.contentHeight*0.83)
 
 	local function re(event)
 		--composer.gotoScene("")  --여기에 넣기
