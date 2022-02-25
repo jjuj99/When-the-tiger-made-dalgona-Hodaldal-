@@ -39,7 +39,7 @@ function scene:create( event )
 	showScore.size = 45
 
 	--재시작
-	local retry = display.newImage("Image/retry.png" , display.contentWidth*0.77, display.contentHeight*0.83)
+	local retry = display.newImage("Image/재시작버튼.png" , display.contentWidth*0.77, display.contentHeight*0.83)
 
 	local function re(event)
 		--composer.gotoScene("")  --여기에 넣기
