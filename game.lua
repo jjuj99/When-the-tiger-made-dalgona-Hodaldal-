@@ -803,7 +803,7 @@ function scene:create( event )
 					
 					composer.setVariable(flag1)
 					display.remove(event.target)
-					--composer.gotoScene("veiw2")
+					--composer.gotoScene("end")
 				end
 			else
 				event.target.x=event.xStart
@@ -830,7 +830,7 @@ function scene:create( event )
 							
 					display.remove(event.target)
 					composer.setVariable(flag2)
-					composer.gotoScene("view2")
+					composer.gotoScene("end")
 				end
 			else
 				event.target.x=event.xStart
