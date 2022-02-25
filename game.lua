@@ -791,7 +791,33 @@ function scene:create( event )
 		if ( event.phase == "began") then
 			display.getCurrentStage():setFocus( event.target )
 			event.target.isFocus = true
-
+		elseif(event.phase == "moved") then
+			if(event.target.isFocus) then
+				event.target.x = event.xStart + event.xDelta
+				event.target.y = event.yStart + event.yDelta
+			end
+		elseif (event.phase == "ended" or event.phase == "cancelled") then		
+			if(event.target.isFocus) then
+				if event.target.x<out.x+100 and event.target.x>out.x-100
+					and event.target.y<out.y+100 and event.target.y>out.y-100 then
+					
+					composer.setVariable(flag1)
+					display.remove(event.target)
+					--composer.gotoScene("veiw2")
+				end
+			else
+				event.target.x=event.xStart
+				event.target.y=event.yStart
+			end
+		end
+	end
+	dalgona1:addEventListener("touch",sale)
+	
+	--달고나2제출 후 엔딩씬
+	local function sale2( event )
+		if ( event.phase == "began") then
+			display.getCurrentStage():setFocus( event.target )
+			event.target.isFocus = true
 		elseif(event.phase == "moved") then
 			if(event.target.isFocus) then
 				event.target.x = event.xStart + event.xDelta
@@ -802,36 +828,17 @@ function scene:create( event )
 				if event.target.x<out.x+100 and event.target.x>out.x-100
 					and event.target.y<out.y+100 and event.target.y>out.y-100 then
 							
-					--display.remove(event.target)
-					--composer.gotoScene("end", "fade")
-					--composer.gotoScene("end")
-
-					event.target.alpha = 0
-
-					event.target.x=event.target.dalgonaX
-					event.target.y=event.target.dalgonaY
-				else
-					event.target.x=event.target.dalgonaX
-					event.target.y=event.target.dalgonaY
-					
+					display.remove(event.target)
+					composer.setVariable(flag2)
+					composer.gotoScene("view2")
 				end
-				display.getCurrentStage():setFocus( nil )
-				event.target.isFocus = false
+			else
+				event.target.x=event.xStart
+				event.target.y=event.yStart
 			end
-			display.getCurrentStage():setFocus( nil )
-			event.target.isFocus = false
 		end
 	end
-
-
-	dalgona1:addEventListener("touch",sale)
-	dalgona2:addEventListener("touch",sale)
-
-
-
-
-
-
+	dalgona2:addEventListener("touch",sale2)
 
 
 end
