@@ -67,9 +67,13 @@ function scene:create( event )
 	--배경
 	local background = display.newRect( display.contentWidth/2, display.contentHeight/2, display.contentWidth, display.contentHeight)
 	--성공 또는 실패
+<<<<<<< HEAD
 	--local score = composer.getVariable( "score" )
 	score = 0
 
+=======
+	local score = composer.getVariable( "score" )
+>>>>>>> bbbdf119d42354dab50cea5e34165cba86269173
 	if(score >= 10000) then
 		local win = display.newImage("Content/Image/Ending/성공.png", display.contentWidth/2, display.contentHeight/2)
 		win.width = display.contentWidth
@@ -96,15 +100,20 @@ function scene:create( event )
 
 	--재시작버튼
 	local retry = display.newImage("Content/Image/Ending/엔딩 재시작.png" , display.contentWidth*0.433, display.contentHeight*0.867)
+<<<<<<< HEAD
 	retry.width = 369
 	retry.height = 144
 
 	sceneGroup:insert(retry)
 
+=======
+	retry.width = 580
+	retry.height = 220
+>>>>>>> bbbdf119d42354dab50cea5e34165cba86269173
 	--엔딩홈버튼
 	local home = display.newImage("Content/Image/Ending/엔딩 홈.png" , display.contentWidth*0.644, display.contentHeight*0.867)
-	home.width = 144
-	home.height = 144
+	home.width = 220
+	home.height = 220
 
 	sceneGroup:insert(home)
 
