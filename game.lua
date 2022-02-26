@@ -59,6 +59,12 @@ function scene:create( event )
 		audio.setVolume(vol*0.1, {channel = 2})
 	end
 
+	--점수
+	local score = 0
+	local showScore = display.newText(score, display.contentWidth*0.85, display.contentHeight*0.93)
+	showScore:setFillColor(0)
+	showScore.size = 80
+
 	-- 전체 타이머 --
 	local limit = 100
 	local showLimit = display.newText(limit, display.contentWidth*0.6, display.contentHeight*0.93) 
@@ -72,6 +78,7 @@ function scene:create( event )
 		showLimit.text = limit
 		if(limit == 0) then
 			composer.setVariable("complete", false)
+			composer.setVariable("score", score)
 			composer.gotoScene("end")
 		end
 	end
@@ -952,14 +959,13 @@ function scene:create( event )
 
 	shapeFrame:addEventListener("touch", catchShpeFrame)
 
-	--점수
-	local score = 0
-	local showScore = display.newText(score, display.contentWidth*0.85, display.contentHeight*0.93)
-	showScore:setFillColor(0)
-	showScore.size = 80
+
 	
 
-	flag1=0	
+	
+	
+
+	--flag1=0	
 	--달고나 
 
 	local function sale( event )
@@ -996,7 +1002,7 @@ function scene:create( event )
 
 					
 
-					composer.setVariable("score", score)
+					--composer.setVariable("score", score)
 
 					--점수계산
 					showScore.text = score

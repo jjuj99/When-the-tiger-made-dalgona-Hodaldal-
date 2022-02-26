@@ -14,6 +14,7 @@ function scene:create( event )
 	local background = display.newRect( display.contentWidth/2, display.contentHeight/2, display.contentWidth, display.contentHeight)
 	--성공 또는 실패
 	local score = composer.getVariable( "score" )
+
 	if(score >= 10000) then
 		local win = display.newImage("Content/Image/Ending/성공.png", display.contentWidth/2, display.contentHeight/2)
 		win.width = display.contentWidth

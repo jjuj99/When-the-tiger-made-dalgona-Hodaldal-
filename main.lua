@@ -14,7 +14,7 @@ local composer = require "composer"
 
 -- event listeners for tab buttons:
 local function onFirstView( event )
-	composer.gotoScene( "start" )
+	composer.gotoScene( "game" )
 end
 
 onFirstView()	-- invoke first tab button's onPress event manually
