@@ -43,7 +43,7 @@ function scene:create( event )
 	home.height = 144
 
 	
-	-씬 이동
+	--씬 이동
 	local function re(event)
 		composer.gotoScene("game")
 	end
