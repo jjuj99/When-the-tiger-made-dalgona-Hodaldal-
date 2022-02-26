@@ -907,37 +907,17 @@ function scene:create( event )
 
 	shapeFrame:addEventListener("touch", catchShpeFrame)
 
-	-- 판매 --
-	local function sale( event )
-		if ( event.phase == "began") then
-			display.getCurrentStage():setFocus( event.target )
-			event.target.isFocus = true
-		elseif(event.phase == "moved") then
-			if(event.target.isFocus) then
-				event.target.x = event.xStart + event.xDelta
-				event.target.y = event.yStart + event.yDelta
-			end
-		elseif (event.phase == "ended" or event.phase == "cancelled") then		
-			if(event.target.isFocus) then
-				if event.target.x<out.x+100 and event.target.x>out.x-100
-					and event.target.y<out.y+100 and event.target.y>out.y-100 then
-					
-					composer.setVariable(flag1)
-					display.remove(event.target)
-					--composer.gotoScene("end")
-				end
-			else
-				event.target.x=event.xStart
-				event.target.y=event.yStart
-			end
-		end
-	end
-
-	dalgona1:addEventListener("touch",sale)
-
+	--점수
+	local score = 0
+	local showScore = display.newText(score, display.contentWidth*0.76, display.contentHeight*0.93)
+		showScore:setFillColor(0)
+		showScore.size = 45
 	
-	--달고나2제출 후 엔딩씬
-	local function sale2( event )
+
+		
+	--달고나 
+	local function sale( event )
+
 		if ( event.phase == "began") then
 			display.getCurrentStage():setFocus( event.target )
 			event.target.isFocus = true
@@ -952,16 +932,42 @@ function scene:create( event )
 					and event.target.y<out.y+100 and event.target.y>out.y-100 then
 							
 					display.remove(event.target)
-					composer.setVariable(flag2)
-					composer.gotoScene("end")
+					if (flag1==0) then
+						score = score + 1000
+					elseif(flag2==0)then
+						score = score + 1000
+					end
+
+					composer.setVariable("score", score)
+
+					--점수계산
+					showScore.text = score
 				end
 			else
 				event.target.x=event.xStart
 				event.target.y=event.yStart
 			end
+
+			
 		end
 	end
-	dalgona2:addEventListener("touch",sale2)
+	dalgona1:addEventListener("touch",sale)
+	dalgona2:addEventListener("touch",sale)
+end
+
+
+function scene:show( event )
+	local sceneGroup = self.view
+	local phase = event.phase
+	
+	if phase == "will" then
+		-- Called when the scene is still off screen and is about to move on screen
+	elseif phase == "did" then
+		-- Called when the scene is now on screen
+		-- 
+		-- INSERT code here to make the scene come alive
+		-- e.g. start timers, begin animation, play audio, etc.
+	end	
 
 
 
