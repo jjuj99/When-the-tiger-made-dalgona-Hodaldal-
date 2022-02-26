@@ -31,7 +31,7 @@ function scene:create( event )
 
 
 	--재시작
-	local retry = display.newImage("Content/Image/Ending/재시작.png" , display.contentWidth*0.77, display.contentHeight*0.83)
+	local retry = display.newImage("Content/Image/Ending/재시작버튼.png" , display.contentWidth*0.77, display.contentHeight*0.83)
 
 	local function re(event)
 		--composer.gotoScene("")
