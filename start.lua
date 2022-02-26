@@ -7,194 +7,88 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+v = "@@@"
+
+function scene:resumeGame()
+    --code to resume game
+end
+
 function scene:create( event )
 	local sceneGroup = self.view
 
 	-- 배경 --
-	local background = display.newImageRect("Content/Image/Start/스타트 화면 배경.png", display.contentWidth, display.contentHeight)
+	local background = display.newImageRect("Content/Image/Start/시작화면 배경.png", display.contentWidth, display.contentHeight)
 	background.x, background.y = display.contentWidth/2, display.contentHeight/2
 
 	sceneGroup:insert(background)
 
 	-- 시작버튼 --
-	local startBtn = display.newImage("Content/Image/Start/시작버튼.png")
-	startBtn:translate(960, 880)
+	local startBtn = display.newImage("Content/Image/Start/시작화면 시작버튼.png")
+	startBtn:translate(960, 950)
 
 	sceneGroup:insert(startBtn)
 
 	-- 도움말버튼 --
-	local helpBtn = display.newImage("Content/Image/Start/도움말 버튼.png")
-	helpBtn:translate(1700, 890)
+	local helpBtn = display.newImage("Content/Image/Start/시작화면 도움말.png")
+	helpBtn:translate(300, 983)
 
 	sceneGroup:insert(helpBtn)
 
-	-- 스코어 --
-	local score = 0 		-- ???스코어의 의미??? --
-
-	-- 시작하기 --
-	local function start( event )
-		score = score + 1
-		if score == 1 then
-			composer.gotoScene("game")
-		end
-	end
-
-	startBtn:addEventListener("tap", start)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	-- 브금 --
 	local soundFile = audio.loadSound("Content/Sound/BGM/If I Had a Chicken - Kevin MacLeod.mp3")
+	local vol = 4
 	audio.play(soundFile, {
 		channel = 1,
 		loops = -1})
-	local bgmOn = true
+	audio.setVolume(vol*0.1, {channel = 1})
 
+	-- 옵션 --
+	local function openOption( event )
+		local options = {
+		    isModal = true,
+		    effect = "fade",
+		    time = 400,
+		    params = {}
+		}
+
+		composer.showOverlay("option", options)
 	
-	
-	audio.pause(1)
-
-	--local optionView = display.newImageRect("Content/Image/MainGame/테이블 배경.png", 700, 500)
-	--optionView.x, optionView.y = display.contentWidth*0.5, display.contentHeight*0.5
-
-	local optionBtn = display.newImageRect("Content/Image/MainGame/달고나 덩어리.png", 150, 150)
-	optionBtn.x, optionBtn.y = display.contentWidth*0.9, display.contentHeight*0.1
-
-	
-
-	local function option( event )
-
-		local optionView = display.newImageRect("Content/Image/MainGame/테이블 배경.png", 700, 500)
-		optionView.x, optionView.y = display.contentWidth*0.5, display.contentHeight*0.5
-
-		sceneGroup:insert(optionView)
-
-
-			-- 볼륨 조절 --
-
-		local volGroup = display.newGroup()
-
-		local bgmCheck
-
-		if (bgmOn) then
-			bgmCheck = display.newImage(volGroup, "Content/Image/MainGame/fish.png")
-		else
-			bgmCheck = display.newImage(volGroup, "Content/Image/MainGame/cat.png")
-		end
-
-
-
-		bgmCheck.x, bgmCheck.y = display.contentWidth*0.7, display.contentHeight*0.5
-		--bgmCheck.on = true
-		bgmCheck.channel = 1
-		
-
-		local vol = 4
-		local showVol = display.newText(volGroup, vol, display.contentWidth*0.5, display.contentHeight*0.5)
-		showVol:setFillColor(0)
-		showVol.size = 50
-
-		local l = "<"
-		local showL = display.newText(volGroup, l, display.contentWidth*0.45, display.contentHeight*0.5)
-		showL:setFillColor(0)
-		showL.size = 50
-
-		local r = ">"
-		local showR = display.newText(volGroup, r, display.contentWidth*0.55, display.contentHeight*0.5)
-		showR:setFillColor(0)
-		showR.size = 50
-
-		audio.setVolume(vol*0.1, {channel = 1})
-
-		local function volDown( event )
-			if(vol > 0) then
-				vol = vol - 1
-				showVol.text = vol
-				audio.setVolume(vol*0.1, {channel = 1})
-			end
-		end
-
-		local function volUp( event )
-			if(vol < 10) then
-				vol = vol + 1
-				showVol.text = vol
-				audio.setVolume(vol*0.1, {channel = 1})
-			end
-		end
-
-		showL:addEventListener("tap", volDown)
-		showR:addEventListener("tap", volUp)
-
-		
-
-		local function mute( event )
-			if(bgmOn) then
-				audio.pause(1)
-				bgmOn = false
-				bgmCheck.fill = {
-					type = "image",
-					filename = "Content/Image/MainGame/cat.png"
-				}
-			else
-				audio.resume()
-				bgmOn = true
-				bgmCheck.fill = {
-					type = "image",
-					filename = "Content/Image/MainGame/fish.png"
-				}
-
-			end
-			
-		end
-
-		bgmCheck:addEventListener("tap", mute)
-
-		sceneGroup:insert(volGroup)
-
-
-
-
-
-		local function close( event )
-			display.remove(optionView)
-			optionView = nil
-
-			display.remove(volGroup)
-			volGroup = nil
-		end
-
-		optionView:addEventListener("tap", close)
-
-
-
-		--sceneGroup:insert(optionView)
 	end
+
+	local optionBtn = display.newImage("Content/Image/Start/시작화면 옵션.png")
+	optionBtn.x, optionBtn.y = display.contentWidth*0.055, display.contentHeight*0.91
+	optionBtn.destination = "optionBtn"
+
+	optionBtn:addEventListener("tap", openOption)
 
 	sceneGroup:insert(optionBtn)
 
-	optionBtn:addEventListener("tap", option)
+	-- 도움말 --
+	local function openHelp( event )
+		local options = {
+		    isModal = true,
+		    effect = "fade",
+		    time = 400,
+		    params = {
+		        sampleVar = "my sample variable"
+		    }
+		}
+
+		composer.showOverlay("help", options)
+	end
+
+	helpBtn:addEventListener("tap", openHelp)
+
+	-- 시작하기 --
+	local function start( event )
+		--composer.setVariable("vol", vol)
+		--composer.setVariable("bgmOn", bgmOn)
 
 
+		composer.gotoScene("game")
+	end
 
-
-
+	startBtn:addEventListener("tap", start)
 
 end
 
@@ -223,6 +117,9 @@ function scene:hide( event )
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
 	elseif phase == "did" then
 		-- Called when the scene is now off screen
+
+		audio.pause(1)
+
 	end
 end
 
