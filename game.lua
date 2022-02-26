@@ -118,7 +118,8 @@ function scene:create( event )
 	ladle1.ladleX, ladle1.ladleY = display.contentWidth*0.085, display.contentHeight*0.6
 	ladle1.x, ladle1.y = ladle1.ladleX, ladle1.ladleY
 	
-	ladle1.sugar = true -- 국자가 채워진 상태인지 아닌지 구분
+	ladle1Fill = false -- 국자가 채워진 상태인지 아닌지 구분
+	ladle1.sugar = true 
 	ladle1.soda = false
 	ladle1.burn = false
 	ladle1.mix = false
@@ -127,6 +128,7 @@ function scene:create( event )
 	ladle2.ladleX, ladle2.ladleY = display.contentWidth*0.29, display.contentHeight*0.6
 	ladle2.x, ladle2.y = ladle2.ladleX, ladle2.ladleY
 
+	ladle2Fill = false
 	ladle2.sugar = true
 	ladle2.soda = false
 	ladle2.burn = false
@@ -248,94 +250,98 @@ function scene:create( event )
 				if event.target.x < ladle1.x + 200 and event.target.x > ladle1.x - 200
 						and event.target.y < ladle1.y + 200 and event.target.y > ladle1.y - 200 then
 
-					ladle1.fill = { 
-						type = "image",
-						filename = "Content/Image/MainGame/국자 설탕.png"
-					}
-					--[[
-					--시간 설정--
-					local limit = 4
+					if ladle1Fill == false then
+						ladle1.fill = { 
+							type = "image",
+							filename = "Content/Image/MainGame/국자 설탕.png"
+						}
+						--[[
+						--시간 설정--
+						local limit = 4
 
-					local function timeAttack( event )
-						limit = limit -1
+						local function timeAttack( event )
+							limit = limit -1
 
-						-- 설탕 덜 녹음--
-						if(limit == 2) then
-							ladle1.fill = {
-								type="image",
-								filename="Content/Image/MainGame/국자 덜녹음.png"
-						    }
+							-- 설탕 덜 녹음--
+							if(limit == 2) then
+								ladle1.fill = {
+									type="image",
+									filename="Content/Image/MainGame/국자 덜녹음.png"
+							    }
+							end
+
+							--설탕 녹음 -- 
+							if(limit == 0) then
+								ladle1.fill = {
+									type="image",
+									filename="Content/Image/MainGame/국자 설탕녹음.png"
+								}
+							end
+
 						end
+						timer.performWithDelay( 1000, timeAttack, 0 )
 
-						--설탕 녹음 -- 
-						if(limit == 0) then
-							ladle1.fill = {
-								type="image",
-								filename="Content/Image/MainGame/국자 설탕녹음.png"
-							}
-						end
+						ladle1.fill = { 
+							type = "image",
+							filename = "Content/Image/MainGame/국자 설탕.png"
+						}
+						]]
 
+						-- 시간제한 시작 --
+						sugarTime1 = 10
+						timer.performWithDelay( 1000, meltSugar1, 0	, "sugarTimer1")
 					end
-					timer.performWithDelay( 1000, timeAttack, 0 )
-
-					ladle1.fill = { 
-						type = "image",
-						filename = "Content/Image/MainGame/국자 설탕.png"
-					}
-					]]
-
-					-- 시간제한 시작 --
-					sugarTime1 = 10
-					timer.performWithDelay( 1000, meltSugar1, 0	, "sugarTimer1")
 
 					-- 설탕 원위치 --
 					event.target.x = sugarX
 					event.target.y = sugarY
 
 					ladle1.sugar = true -- 설탕이 채워졌는지 --
+					ladle1Fill = true
 
 				elseif event.target.x < ladle2.x + 200 and event.target.x > ladle2.x - 200
 						and event.target.y < ladle2.y + 200 and event.target.y > ladle2.y - 200 then
 
-					--시간 설정--
-					local limit = 4
+					if ladle2Fill == false then
 
-					ladle2.fill = { 
-						type = "image",
-						filename = "Content/Image/MainGame/국자 설탕.png"
-					}
-					--[[
-					local function timeAttack( event )
-						limit = limit -1
+						ladle2.fill = { 
+							type = "image",
+							filename = "Content/Image/MainGame/국자 설탕.png"
+						}
+						--[[
+						local function timeAttack( event )
+							limit = limit -1
 
-						-- 설탕 덜 녹음--
-						if(limit == 2) then
-							ladle2.fill = {
-								type="image",
-								filename="Content/Image/MainGame/국자 덜녹음.png"
-						    }
+							-- 설탕 덜 녹음--
+							if(limit == 2) then
+								ladle2.fill = {
+									type="image",
+									filename="Content/Image/MainGame/국자 덜녹음.png"
+							    }
+							end
+
+							--설탕 녹음 -- 
+							if(limit == 0) then
+								ladle2.fill = {
+									type="image",
+									filename="Content/Image/MainGame/국자 설탕녹음.png"
+								}
+							end
 						end
+						timer.performWithDelay( 1000, timeAttack, 0 )
+						]]
 
-						--설탕 녹음 -- 
-						if(limit == 0) then
-							ladle2.fill = {
-								type="image",
-								filename="Content/Image/MainGame/국자 설탕녹음.png"
-							}
-						end
+						-- 시간제한 시작 --
+						sugarTime2 = 10
+						timer.performWithDelay( 1000, meltSugar2, 0 , "sugarTimer2")
 					end
-					timer.performWithDelay( 1000, timeAttack, 0 )
-					]]
-
-					-- 시간제한 시작 --
-					sugarTime2 = 10
-					timer.performWithDelay( 1000, meltSugar2, 0 , "sugarTimer2")
 
 					-- 설탕 원위치 --
 					event.target.x = sugarX
 					event.target.y = sugarY
 
 					ladle2.sugar = true
+					ladle2Fill = true
 
 				else
 					event.target.x = sugarX
@@ -696,6 +702,8 @@ function scene:create( event )
 
 			event.target.x = event.target.ladleX
 			event.target.y = event.target.ladleY
+			ladle1Fill = false
+			ladle2Fill = false 
 
 			display.getCurrentStage():setFocus(nil)
 			event.target.isFocus = false
