@@ -10,6 +10,8 @@ local scene = composer.newScene()
 function scene:resumeGame(vol)
     --code to resume game
 
+    timer.resumeAll()
+
 end
 
 function scene:create( event )
@@ -88,7 +90,6 @@ function scene:create( event )
 
 	dalgona1.press = false
 	dalgona1.hard = false
-
 
 	sceneGroup: insert(dalgona1)
 
@@ -935,23 +936,6 @@ function scene:create( event )
 	end
 	dalgona1:addEventListener("touch",sale)
 	dalgona2:addEventListener("touch",sale)
-end
-
-
-function scene:show( event )
-	local sceneGroup = self.view
-	local phase = event.phase
-	
-	if phase == "will" then
-		-- Called when the scene is still off screen and is about to move on screen
-	elseif phase == "did" then
-		-- Called when the scene is now on screen
-		-- 
-		-- INSERT code here to make the scene come alive
-		-- e.g. start timers, begin animation, play audio, etc.
-	end	
-
-
 
 	-- 일시정지 --
 	local function openPause( event )
@@ -1006,6 +990,8 @@ function scene:hide( event )
 
 
 		audio.pause(2)
+
+		timer.cancelAll()
 
 	end
 end

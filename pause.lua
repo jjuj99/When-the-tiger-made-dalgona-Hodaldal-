@@ -34,9 +34,8 @@ function scene:create( event )
 	sceneGroup:insert(pauseGroup)
 
 	local function continue( event )
-		--audio.resume(2)
-		audio.rewind( { channel=2 } )
-		timer.resumeAll()
+		audio.resume(2)
+		--timer.resumeAll()
 		composer.hideOverlay( "fade", 400 )
 	end
 
