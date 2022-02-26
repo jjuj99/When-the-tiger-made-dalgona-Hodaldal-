@@ -10,9 +10,6 @@ local scene = composer.newScene()
 function scene:resumeGame(vol)
     --code to resume game
 
-    --timer.resumeAll()
-    --timer.resume("gameLimit")
-
     timer.resume("gameLimit")
 	timer.resume("sugarTimer1")
 	timer.resume("sugarTimer2")
@@ -282,37 +279,6 @@ function scene:create( event )
 							type = "image",
 							filename = "Content/Image/MainGame/국자 설탕.png"
 						}
-						--[[
-						--시간 설정--
-						local limit = 4
-
-						local function timeAttack( event )
-							limit = limit -1
-
-							-- 설탕 덜 녹음--
-							if(limit == 2) then
-								ladle1.fill = {
-									type="image",
-									filename="Content/Image/MainGame/국자 덜녹음.png"
-							    }
-							end
-
-							--설탕 녹음 -- 
-							if(limit == 0) then
-								ladle1.fill = {
-									type="image",
-									filename="Content/Image/MainGame/국자 설탕녹음.png"
-								}
-							end
-
-						end
-						timer.performWithDelay( 1000, timeAttack, 0 )
-
-						ladle1.fill = { 
-							type = "image",
-							filename = "Content/Image/MainGame/국자 설탕.png"
-						}
-						]]
 
 						-- 시간제한 시작 --
 						sugarTime1 = 10
@@ -335,28 +301,6 @@ function scene:create( event )
 							type = "image",
 							filename = "Content/Image/MainGame/국자 설탕.png"
 						}
-						--[[
-						local function timeAttack( event )
-							limit = limit -1
-
-							-- 설탕 덜 녹음--
-							if(limit == 2) then
-								ladle2.fill = {
-									type="image",
-									filename="Content/Image/MainGame/국자 덜녹음.png"
-							    }
-							end
-
-							--설탕 녹음 -- 
-							if(limit == 0) then
-								ladle2.fill = {
-									type="image",
-									filename="Content/Image/MainGame/국자 설탕녹음.png"
-								}
-							end
-						end
-						timer.performWithDelay( 1000, timeAttack, 0 )
-						]]
 
 						-- 시간제한 시작 --
 						sugarTime2 = 10
@@ -930,14 +874,7 @@ function scene:create( event )
 	end
 
 	shapeFrame:addEventListener("touch", catchShpeFrame)
-
-
 	
-
-	
-	
-
-	--flag1=0	
 	--달고나 
 
 	local function sale( event )
@@ -957,17 +894,8 @@ function scene:create( event )
 							
 					event.target.alpha = 0
 
-
 					event.target.x=event.target.dalgonaX
 					event.target.y=event.target.dalgonaY
-
---[[
-					if (flag1==0) then
-						score = score + 1000
-					elseif(flag2==0)then
-						score = score + 1000
-					end
-					]]--
 
 					if event.target.success then
 						score = score + 1000
@@ -976,10 +904,6 @@ function scene:create( event )
 					event.target.success = true
 					event.target.press = false
 					event.target.hard = false
-
-					
-
-					--composer.setVariable("score", score)
 
 					--점수계산
 					showScore.text = score
@@ -1000,8 +924,6 @@ function scene:create( event )
 
 	-- 일시정지 --
 	local function openPause( event )
-		--timer.pauseAll()
-		--audio.pause(2)
 
 		timer.pause("gameLimit")
 		timer.pause("sugarTimer1")
@@ -1026,6 +948,8 @@ function scene:create( event )
 	
 	local pauseBtn = display.newImage("Content/Image/MainGame/PauseView/일시중지.png")
 	pauseBtn.x, pauseBtn.y = display.contentWidth*0.95, display.contentHeight*0.08
+
+	sceneGroup:insert(pauseBtn)
 
 	pauseBtn:addEventListener("tap", openPause)
 
@@ -1059,8 +983,6 @@ function scene:hide( event )
 
 
 		audio.pause(2)
-
-		--timer.cancelAll()
 
 	end
 end
