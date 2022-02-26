@@ -10,13 +10,6 @@ local scene = composer.newScene()
 function scene:create( event )
 	local sceneGroup = self.view
 
-	
-local composer = require( "composer" )
-local scene = composer.newScene()
-
-function scene:create( event )
-	local sceneGroup = self.view
-
 	--배경
 	local background = display.newRect( display.contentWidth/2, display.contentHeight/2, display.contentWidth, display.contentHeight)
 
