@@ -145,7 +145,7 @@ function scene:create( event )
 	ladle1.ladleX, ladle1.ladleY = display.contentWidth*0.07, display.contentHeight*0.56
 	ladle1.x, ladle1.y = ladle1.ladleX, ladle1.ladleY
 	
-	ladle1Fill = false -- 국자가 채워진 상태인지 아닌지 구분
+	ladle1.full = false -- 국자가 채워진 상태인지 아닌지 구분
 	ladle1.sugar = true 
 	ladle1.soda = false
 	ladle1.burn = false
@@ -155,7 +155,7 @@ function scene:create( event )
 	ladle2.ladleX, ladle2.ladleY = display.contentWidth*0.27, display.contentHeight*0.56
 	ladle2.x, ladle2.y = ladle2.ladleX, ladle2.ladleY
 
-	ladle2Fill = false
+	ladle2.full = false
 	ladle2.sugar = true
 	ladle2.soda = false
 	ladle2.burn = false
@@ -184,7 +184,7 @@ function scene:create( event )
 
 	-- 젓가락 소환 --
 	local chapstick = display.newImage("Content/Image/MainGame/젓가락.png")
-	chapstickX, chapstickY = display.contentWidth * 0.5, display.contentHeight * 0.165
+	chapstickX, chapstickY = display.contentWidth * 0.45, display.contentHeight * 0.165
 	chapstick.x, chapstick.y = chapstickX, chapstickY
 
 	local chapstickSoda = false --젓가락에 소다가 찍혔는지 판정하는 파라미터
@@ -277,7 +277,7 @@ function scene:create( event )
 				if event.target.x < ladle1.x + 200 and event.target.x > ladle1.x - 200
 						and event.target.y < ladle1.y + 200 and event.target.y > ladle1.y - 200 then
 
-					if ladle1Fill == false then
+					if ladle1.full == false then
 						ladle1.fill = { 
 							type = "image",
 							filename = "Content/Image/MainGame/국자 설탕.png"
@@ -324,12 +324,12 @@ function scene:create( event )
 					event.target.y = sugarY
 
 					ladle1.sugar = true -- 설탕이 채워졌는지 --
-					ladle1Fill = true
+					ladle1.full = true
 
 				elseif event.target.x < ladle2.x + 200 and event.target.x > ladle2.x - 200
 						and event.target.y < ladle2.y + 200 and event.target.y > ladle2.y - 200 then
 
-					if ladle2Fill == false then
+					if ladle2.full == false then
 
 						ladle2.fill = { 
 							type = "image",
@@ -368,7 +368,7 @@ function scene:create( event )
 					event.target.y = sugarY
 
 					ladle2.sugar = true
-					ladle2Fill = true
+					ladle2.full = true
 
 				else
 					event.target.x = sugarX
@@ -448,7 +448,7 @@ function scene:create( event )
 					}
 	
 				elseif(sodaTime1 == 3) then
-					ladle2.mix = true
+					ladle1.mix = true
 					ladle1.fill = {
 						type = "image",
 						filename = "Content/Image/MainGame/국자 달고나.png"
@@ -598,147 +598,111 @@ function scene:create( event )
 				--설탕달고나 설탕O, 소다X, 태우기X
 				--설탕탄달고나 설탕O, 소다X, 태우기O
 				--소다덜섞달고나 설탕O, 소다O, 태우기X
-				--소다탄달고나 설탕O, 소다O, 태우기O
+				--탄달고나 설탕O, 소다O, 태우기O
 				--왼쪽 판put
 				if event.target.x < plate1.x + 100 and event.target.x > plate1.x - 100
 					and event.target.y < plate1.y + 100 and event.target.y > plate1.y - 100 then
-					
-					dalgona1.alpha = 1
-					if event.target.sugar == true and event.target.soda == true and event.target.burn == false and event.mix == true then
-						print("달고나 완성")
-						dalgona1.fill = {
-							type = "image",
-							filename = "Content/Image/MainGame/달고나 덩어리.png"
-						}
-					elseif event.target.sugar == true and event.target.soda == false and event.target.burn == false then
-						print("설탕만")
-
-						dalgona1.success = false
-
-						dalgona1.fill = {
-							type = "image",
-							filename = "Content/Image/MainGame/달고나판 설탕만.png"
-						}
-					elseif event.target.sugar == true and event.target.soda == false and event.target.burn == true then
-						print("설탕만, 탐")
-
-						dalgona1.success = false
-
-						dalgona1.fill = {
-							type = "image",
-							filename = "Content/Image/MainGame/달고나판 설탕 탐.png"--탄 설탕
-						}
-					elseif event.target.sugar == true and event.target.soda == true and event.target.burn == false and event.target.mix == false then
+					--판에 달고나가 없을 때만 실행
+					if (dalgona1.alpha == 0 and event.target.sugar == true) then
+						dalgona1.alpha = 1
+						if event.target.soda == false then
+							if event.target.burn == false then
+								dalgona1.fill = {
+									type = "image",
+									filename = "Content/Image/MainGame/달고나판 설탕만.png"
+								}
+							else
+								dalgona1.fill = {
+									type = "image",
+									filename = "Content/Image/MainGame/달고나판 설탕 탐.png"--탄 설탕
+								}
+							end
+						elseif event.target.mix == false then
+							dalgona1.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/달고나판 소다덜섞인.png"
+							}
+						elseif event.target.burn == true then
+							dalgona1.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/달고나 덩어리 탐.png"--탄 달고나
+							}
+						else
+							dalgona1.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/달고나 덩어리.png"
+							}
+						end
 						
-						dalgona1.success = false
+						print("달고나 놓기")
 
-						dalgona1.fill = {
+
+						dalgona1.x, dalgona1.y = dalgona1.dalgonaX, dalgona1.dalgonaY
+
+						event.target.fill = {
 							type = "image",
-							filename = "Content/Image/MainGame/달고나판 소다덜섞인.png"
+							filename = "Content/Image/MainGame/국자.png"
 						}
-					elseif event.target.sugar == true and event.target.soda == true and event.target.burn == true then
-						
-						dalgona1.success = false
 
-						dalgona1.fill = {
-							type = "image",
-							filename = "Content/Image/MainGame/달고나 덩어리 탐.png"--탄 달고나
-						}
-					end
-
-					print("달고나 놓기")
-
-					dalgona1.x, dalgona1.y = dalgona1.dalgonaX, dalgona1.dalgonaY
-
-					--[[dalgona1.fill = {
-						type = "image",
-						filename = "Content/Image/MainGame/달고나 덩어리.png"
-					}
-					]]
-
-					event.target.fill = {
-						type = "image",
-						filename = "Content/Image/MainGame/국자.png"
-					}
-
-					event.target.x = event.target.ladleX
-					event.target.y = event.target.ladleY
-
-					if(event.target == ladle1) then
-						timer.cancel("sugarTimer1")
-						timer.cancel("sodaTimer1")
-					elseif(event.target == ladle2) then
-						timer.cancel("sugarTimer2")
-						timer.cancel("sodaTimer2")
+						if(event.target == ladle1) then
+							timer.cancel("sugarTimer1")
+							timer.cancel("sodaTimer1")
+						elseif(event.target == ladle2) then
+							timer.cancel("sugarTimer2")
+							timer.cancel("sodaTimer2")
+						end
 					end
 
 				elseif event.target.x < plate2.x + 100 and event.target.x > plate2.x - 100
 					and event.target.y < plate2.y + 100 and event.target.y > plate2.y - 100 then
-					
-					dalgona2.alpha = 1
-					if event.target.sugar == true and event.target.soda == true and event.target.burn == false and event.target.mix == true then
-						dalgona2.fill = {
+					--판2에 달고나가 없을 때만 실행
+					if dalgona2.alpha == 0 then
+						dalgona2.alpha = 1
+						if event.target.soda == false then
+							if event.target.burn == false then
+								dalgona2.fill = {
+									type = "image",
+									filename = "Content/Image/MainGame/달고나판 설탕만.png"
+								}
+							else
+								dalgona2.fill = {
+									type = "image",
+									filename = "Content/Image/MainGame/달고나판 설탕 탐.png"--탄 설탕
+								}
+							end
+						elseif event.target.mix == false then
+							dalgona2.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/달고나판 소다덜섞인.png"
+							}
+						elseif event.target.burn == true then
+							dalgona2.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/달고나 덩어리 탐.png"--탄 달고나
+							}
+						else
+							dalgona2.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/달고나 덩어리.png"
+							}
+						end
+
+						print("달고나 놓기2")
+
+						dalgona2.x, dalgona2.y = dalgona2.dalgonaX, dalgona2.dalgonaY
+
+						event.target.fill = {
 							type = "image",
-							filename = "Content/Image/MainGame/달고나 덩어리.png"
+							filename = "Content/Image/MainGame/국자.png"
 						}
-					elseif event.target.sugar == true and event.target.soda == false and event.target.burn == false then
-						
-						dalgona2.success = false
 
-						dalgona2.fill = {
-							type = "image",
-							filename = "Content/Image/MainGame/달고나판 설탕만.png"
-						}
-					elseif event.target.sugar ==true and event.target.soda == false and event.target.burn == true then
-						
-						dalgona2.success = false
-
-						dalgona2.fill = {
-							type = "image",
-							filename = "Content/Image/MainGame/달고나판 설탕 탐.png"--탄 설탕
-						}
-					elseif event.target.sugar == true and event.target.soda == true and event.target.burn == false and event.target.mix == false then
-						
-						dalgona2.success = false
-
-						dalgona2.fill = {
-							type = "image",
-							filename = "Content/Image/MainGame/달고나판 소다덜섞인.png"
-						}
-					elseif event.target.sugar == true and event.target.soda == true and event.target.burn == true then
-						
-						dalgona2.success = false
-
-						dalgona2.fill = {
-							type = "image",
-							filename = "Content/Image/MainGame/달고나 덩어리 탐.png"--탄 달고나
-						}
-					end
-
-					print("달고나 놓기2")
-
-					dalgona2.x, dalgona2.y = dalgona2.dalgonaX, dalgona2.dalgonaY
-					--[[
-					dalgona2.fill = {
-						type = "image",
-						filename = "Content/Image/MainGame/달고나 덩어리.png"
-					}
-					]]
-
-					event.target.fill = {
-						type = "image",
-						filename = "Content/Image/MainGame/국자.png"
-					}
-
-					event.target.x = event.target.ladleX
-					event.target.y = event.target.ladleY
-
-					if(event.target == ladle1) then
-						timer.cancel("sugarTimer1")
-						timer.cancel("sodaTimer1")
-					elseif(event.target == ladle2) then
-						timer.cancel("sugarTimer2")
-						timer.cancel("sodaTimer2")
+						if(event.target == ladle1) then
+							timer.cancel("sugarTimer1")
+							timer.cancel("sodaTimer1")
+						elseif(event.target == ladle2) then
+							timer.cancel("sugarTimer2")
+							timer.cancel("sodaTimer2")
+						end
 					end
 				end
 				--국자 원위치
@@ -746,9 +710,11 @@ function scene:create( event )
 				event.target.y = event.target.ladleY
 
 				event.target.sugar = false
+				event.target.melt = false
 				event.target.soda = false
 				event.target.burn = false
 				event.target.mix = false
+				event.target.full = false
 
 				display.getCurrentStage():setFocus(nil)
 				event.target.isFocus = false
@@ -756,8 +722,6 @@ function scene:create( event )
 
 			event.target.x = event.target.ladleX
 			event.target.y = event.target.ladleY
-			ladle1Fill = false
-			ladle2Fill = false 
 
 			display.getCurrentStage():setFocus(nil)
 			event.target.isFocus = false
