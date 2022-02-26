@@ -7,6 +7,11 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+function scene:resumeGame(vol)
+    --code to resume game
+
+end
+
 function scene:create( event )
 	local sceneGroup = self.view
 
@@ -16,14 +21,48 @@ function scene:create( event )
 
 	sceneGroup:insert(background)
 
+	-- 브금 --
+	local soundFile = audio.loadSound("Content/Sound/BGM/Do Do Do - Silent Partner.mp3")
+
+	local vol = math.floor(audio.getVolume( { channel=1 } ) * 10)
+	local bgmOn = audio.isChannelPlaying(1)
+
+	composer.setVariable("bgm", bgmOn)
+
+	if (bgmOn) then
+		audio.play(soundFile, {
+		channel = 2,
+		loops = -1})
+		audio.setVolume(vol*0.1, {channel = 2})
+	end
+
+	-- 전체 타이머 --
+	local limit = 100
+	local showLimit = display.newText(limit, display.contentWidth*0.6, display.contentHeight*0.92) 
+	showLimit:setFillColor(0) 
+	showLimit.size = 80
+
+	sceneGroup:insert(showLimit)
+
+	local function timeAttack( event )
+		limit = limit -1
+		showLimit.text = limit
+		if(limit == 0) then
+			composer.setVariable("complete", false)
+			composer.gotoScene("end")
+		end
+	end
+	timer.performWithDelay( 1000, timeAttack, 0 , "gameLimit")
+
 	-- *** 도구 소환 *** --
 
-	--달고나판 소환 --
-	--local plate = display.newImage("Content/Image/MainGame/달고나판.png")
-	--plate.x, plate.y = display.contentWidth * 0.665, display.contentHeight * 0.63
+	-- 선반 --
+	local shelf = display.newImage("Content/Image/MainGame/선반.png")
+	shelf.x, shelf.y = display.contentWidth*0.442, display.contentHeight*0.171
 
-	--sceneGroup: insert(plate)
+	sceneGroup:insert(shelf)
 
+	-- 달고나 판 --
 	local plates = display.newGroup()
 
 	local plate1 = display.newImage(plates, "Content/Image/MainGame/달고나판1.png")
@@ -36,35 +75,47 @@ function scene:create( event )
 
 	-- 매대 소환--
 	local out = display.newImage("Content/Image/MainGame/매대.png")
-	out.x, out.y = display.contentWidth*0.95, display.contentHeight*0.5
+	out.x, out.y = display.contentWidth*0.95, display.contentHeight*0.54
 
 	sceneGroup:insert(out)
+
+	-- 달고나 소환 --
+	local dalgona1 = display.newImage("Content/Image/MainGame/달고나 덩어리.png")
+	dalgona1.dalgonaX, dalgona1.dalgonaY = display.contentWidth * 0.558, display.contentHeight * 0.615
+	dalgona1.x, dalgona1.y = dalgona1.dalgonaX, dalgona1.dalgonaY
+
+	dalgona1.alpha = 0
+
+	dalgona1.press = false
+	dalgona1.hard = false
+
+
+	sceneGroup: insert(dalgona1)
+
+	local dalgona2 = display.newImage("Content/Image/MainGame/달고나 덩어리.png")
+	dalgona2.dalgonaX, dalgona2.dalgonaY = display.contentWidth * 0.77, display.contentHeight * 0.615
+	dalgona2.x, dalgona2.y = dalgona2.dalgonaX, dalgona2.dalgonaY
+
+	dalgona2.alpha = 0
+
+	dalgona2.press = false
+	dalgona2.hard = false
+
+	sceneGroup: insert(dalgona2)
 
 	-- 국자 --
 	local ladle1 = display.newImage("Content/Image/MainGame/국자.png")
 	ladle1.ladleX, ladle1.ladleY = display.contentWidth*0.085, display.contentHeight*0.6
 	ladle1.x, ladle1.y = ladle1.ladleX, ladle1.ladleY
 	
-	--local ladle1Fill = true -- 국자가 채워진 상태인지 아닌지 구분
-	--local ladle1Soda = false
-
-
-
 	ladle1.sugar = true -- 국자가 채워진 상태인지 아닌지 구분
 	ladle1.soda = false
 	ladle1.burn = false
 	ladle1.mix = false
 
-
-
-
-
 	local ladle2 = display.newImage("Content/Image/MainGame/국자.png")
 	ladle2.ladleX, ladle2.ladleY = display.contentWidth*0.29, display.contentHeight*0.6
 	ladle2.x, ladle2.y = ladle2.ladleX, ladle2.ladleY
-	
-	--local ladle2Fill = true -- 국자가 채워진 상태인지 아닌지 구분
-	--local ladle2Soda = false
 
 	ladle2.sugar = true
 	ladle2.soda = false
@@ -73,8 +124,6 @@ function scene:create( event )
 
 	sceneGroup:insert(ladle1)
 	sceneGroup:insert(ladle2)
-
-
 
 	-- 소다 소환 --
 	local soda = display.newImage("Content/Image/MainGame/소다.png")
@@ -93,43 +142,6 @@ function scene:create( event )
 	sugarX, sugarY = sugar.x, sugar.y
 
 	sceneGroup:insert(sugar)
-
-	-- 달고나 소환 --
-	--[[
-	local dalgona = display.newImage("Content/Image/MainGame/달고나 덩어리.png")
-	dalgonaX, dalgonaY = display.contentWidth * 0.558, display.contentHeight * 0.615
-	dalgona.x, dalgona.y = dalgonaX, dalgonaY
-
-	dalgona.alpha = 0
-
-	dalgona.press = false
-	dalgona.hard = false
-
-	sceneGroup: insert(dalgona) ]]--
-
-	local dalgona1 = display.newImage("Content/Image/MainGame/달고나 덩어리.png")
-	dalgona1.dalgonaX, dalgona1.dalgonaY = display.contentWidth * 0.558, display.contentHeight * 0.615
-	dalgona1.x, dalgona1.y = dalgona1.dalgonaX, dalgona1.dalgonaY
-
-	dalgona1.alpha = 0
-
-	dalgona1.press = false
-	dalgona1.hard = false
-
-	sceneGroup: insert(dalgona1)
-
-	local dalgona2 = display.newImage("Content/Image/MainGame/달고나 덩어리.png")
-	dalgona2.dalgonaX, dalgona2.dalgonaY = display.contentWidth * 0.77, display.contentHeight * 0.615
-	dalgona2.x, dalgona2.y = dalgona2.dalgonaX, dalgona2.dalgonaY
-
-	dalgona2.alpha = 0
-
-	dalgona2.press = false
-	dalgona2.hard = false
-
-	sceneGroup: insert(dalgona2)
-
-
 
 	-- 젓가락 소환 --
 	local chapstick = display.newImage("Content/Image/MainGame/젓가락.png")
@@ -155,12 +167,7 @@ function scene:create( event )
 
 	sceneGroup:insert(shapeFrame)
 
-
-
 	-- *** 동작 *** --
-
-
-
 
 	--설탕 녹는+타는 함수--
 	local sugarTime1 = 10
@@ -275,10 +282,7 @@ function scene:create( event )
 					event.target.x = sugarX
 					event.target.y = sugarY
 
-					--ladle1Fill = true -- 국자가 채워져 있는지 --
-					ladle1.sugar = true
-
-					
+					ladle1.sugar = true -- 설탕이 채워졌는지 --
 
 				elseif event.target.x < ladle2.x + 200 and event.target.x > ladle2.x - 200
 						and event.target.y < ladle2.y + 200 and event.target.y > ladle2.y - 200 then
@@ -321,9 +325,7 @@ function scene:create( event )
 					event.target.x = sugarX
 					event.target.y = sugarY
 
-					--ladle2Fill = true -- 국자가 채워져 있는지 --
 					ladle2.sugar = true
-
 
 				else
 					event.target.x = sugarX
@@ -339,7 +341,6 @@ function scene:create( event )
 	end
 
 	sugar:addEventListener("touch", catchFillSugar)
-
 
 
 	--젓가락에 소다가 없을 때 실행되는, 소다 찍기 함수
@@ -712,65 +713,13 @@ function scene:create( event )
 	ladle1: addEventListener("touch", settingD)
 	ladle2: addEventListener("touch", settingD)
 
-
-	--ladle2 함수 분리
-	--ladle2: addEventListener("touch", settingD)
-
-
-
-
-
-	--[[
-	local pauseBtn = display.newImage("Content/Image/MainGame/fish.png")
-	pauseBtn.x, pauseBtn.y = display.contentWidth*0.1, display.contentHeight*0.9
-
-
-
-	local function pause( event )
-		composer.gotoScene("game")
-	end
-
-	pauseBtn:addEventListener("tap", pause)
-
-	-- 브금 --
-	local soundFile = audio.loadSound("Content/Sound/BGM/Do Do Do - Silent Partner.mp3")
-	audio.play(soundFile, {
-		channel = 1,
-		loops = -1})
-	--audio.setVolume(0.5, {channel = 2})
-	audio.pause(1)
-	]]--
-
-
-	-- 국자 소환 --
-	--local ladle = display.newImage("Content/Image/MainGame/국자.png")
-	--ladle.x, ladle.y = display.contentWidth*0.5, display.contentHeight*0.5
-
-
-	-- 누르기 --
-
-	-- 누르기 전 달고나 소환 --
-	--local dalgona = display.newImage("Content/Image/MainGame/달고나 덩어리.png", 150, 150)
-	--dalgona.x, dalgona.y = display.contentWidth*0.56, display.contentHeight*0.6
-	
-	
-
 	-- 누르고 다서 모양틀 전까지 시간 제한 --
 	local shapeLimit1 = 3
-	local showShapeLimit1 = display.newText(shapeLimit1, display.contentWidth*0.3, display.contentHeight*0.3)
-	showShapeLimit1:setFillColor(0)
-	showShapeLimit1.size = 100
-
 	local shapeLimit2 = 3
-	local showShapeLimit2 = display.newText(shapeLimit1, display.contentWidth*0.7, display.contentHeight*0.3)
-	showShapeLimit2:setFillColor(0)
-	showShapeLimit2.size = 100
-
 
 	local function shapeTimeAttack1( event )
 		if(shapeLimit1 >= 0) then
 			shapeLimit1 = shapeLimit1 - 1
-			showShapeLimit1.text = shapeLimit1
 
 			if(shapeLimit1 == 0) then
 				-- 시간 경과하면 단단해진 달고나로 --
@@ -786,7 +735,6 @@ function scene:create( event )
 	local function shapeTimeAttack2( event )
 		if(shapeLimit2 >= 0) then
 			shapeLimit2 = shapeLimit2 - 1
-			showShapeLimit2.text = shapeLimit2
 
 			if(shapeLimit2 == 0) then
 				-- 시간 경과하면 단단해진 달고나로 --
@@ -862,12 +810,6 @@ function scene:create( event )
 	end
 
 	pressBoard:addEventListener("touch", catchPressBoard)
-
-	sceneGroup:insert(showShapeLimit1)
-
-
-	-- 모양틀 --
-
 
 	-- 모양틀 누르기 --
 	local function catchShpeFrame( event )
@@ -963,10 +905,9 @@ function scene:create( event )
 		end
 	end
 
-
 	shapeFrame:addEventListener("touch", catchShpeFrame)
 
-
+	-- 판매 --
 	local function sale( event )
 		if ( event.phase == "began") then
 			display.getCurrentStage():setFocus( event.target )
@@ -991,7 +932,9 @@ function scene:create( event )
 			end
 		end
 	end
+
 	dalgona1:addEventListener("touch",sale)
+
 	
 	--달고나2제출 후 엔딩씬
 	local function sale2( event )
@@ -1021,6 +964,30 @@ function scene:create( event )
 	dalgona2:addEventListener("touch",sale2)
 
 
+
+	-- 일시정지 --
+	local function openPause( event )
+		timer.pause("gameLimit")
+		--audio.pause(2)
+
+		local options = {
+		    isModal = true,
+		    effect = "fade",
+		    time = 400,
+		    params = {
+		        vol = vol,
+				bgm = bgmOn
+		    }
+		}
+
+		composer.showOverlay("pause", options)
+	end
+	
+	local pauseBtn = display.newImage("Content/Image/MainGame/PauseView/일시중지.png")
+	pauseBtn.x, pauseBtn.y = display.contentWidth*0.95, display.contentHeight*0.08
+
+	pauseBtn:addEventListener("tap", openPause)
+
 end
 
 function scene:show( event )
@@ -1048,6 +1015,10 @@ function scene:hide( event )
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
 	elseif phase == "did" then
 		-- Called when the scene is now off screen
+
+
+		audio.pause(2)
+
 	end
 end
 
@@ -1058,6 +1029,7 @@ function scene:destroy( event )
 	-- 
 	-- INSERT code here to cleanup the scene
 	-- e.g. remove display objects, remove touch listeners, save state, etc.
+
 end
 
 ---------------------------------------------------------------------------------
