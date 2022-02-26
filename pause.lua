@@ -8,13 +8,12 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+local pause
+
 
 function scene:create( event )
 
 	local sceneGroup = self.view
-
-	vol = event.params.vol
-	bgm = event.params.bgm
 
 	-- 브금 정보 --
 
@@ -22,14 +21,17 @@ function scene:create( event )
 
 	local pauseGroup = display.newGroup()
 
-	local pauseView = display.newImage(pauseGroup, "Content/Image/MainGame/PauseView/옵션창.png")
+	local pauseView = display.newImage(pauseGroup, "Content/Image/MainGame/PauseView/플레이화면 옵션창.png")
 	pauseView.x, pauseView.y = display.contentWidth*0.5, display.contentHeight*0.45
 
 	local continueBtn = display.newImage(pauseGroup, "Content/Image/MainGame/PauseView/이어하기.png")
-	continueBtn.x, continueBtn.y = display.contentWidth*0.38, display.contentHeight*0.39
+	continueBtn.x, continueBtn.y = display.contentWidth*0.31, display.contentHeight*0.39
 
 	local restartBtn = display.newImage(pauseGroup, "Content/Image/MainGame/PauseView/재시작.png")
-	restartBtn.x, restartBtn.y = display.contentWidth*0.625, display.contentHeight*0.39
+	restartBtn.x, restartBtn.y = display.contentWidth*0.5, display.contentHeight*0.39
+
+	local homeBtn = display.newImage(pauseGroup, "Content/Image/MainGame/PauseView/시작화면.png")
+	homeBtn.x, homeBtn.y = display.contentWidth*0.695, display.contentHeight*0.39
 
 	sceneGroup:insert(pauseGroup)
 
@@ -37,16 +39,24 @@ function scene:create( event )
 		audio.resume(2)
 		--timer.resumeAll()
 		composer.hideOverlay( "fade", 400 )
+		pause = "continue"
 	end
+
+	continueBtn:addEventListener("tap", continue)
 
 	local function restart( event )
 		composer.removeScene("game", true)
 		composer.gotoScene("game")
+		pause = "restart"
 	end
 
 	restartBtn:addEventListener("tap", restart)
 
-	continueBtn:addEventListener("tap", continue)
+	local function home( event )
+		composer.gotoScene("start")
+	end
+
+	homeBtn:addEventListener("tap", home)
 
 end
  
@@ -57,7 +67,7 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Call the "resumeGame()" function in the parent scene
-        parent:resumeGame(vol)
+        parent:resumeGame(pause)
     end
 end
  

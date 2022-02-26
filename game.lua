@@ -32,6 +32,18 @@ function scene:create( event )
 
 	sceneGroup:insert(background)
 
+	-- 타이머 --
+	local timerView = display.newImage("Content/Image/MainGame/시간.png")
+	timerView.x, timerView.y = display.contentWidth*0.595, display.contentHeight*0.93
+
+	sceneGroup:insert(timerView)
+
+	-- 점수판 --
+	local scoreView = display.newImage("Content/Image/MainGame/돈.png")
+	scoreView.x, scoreView.y = display.contentWidth*0.83, display.contentHeight*0.93
+
+	sceneGroup:insert(scoreView)
+
 	-- 브금 --
 	local soundFile = audio.loadSound("Content/Sound/BGM/Do Do Do - Silent Partner.mp3")
 
@@ -49,7 +61,7 @@ function scene:create( event )
 
 	-- 전체 타이머 --
 	local limit = 100
-	local showLimit = display.newText(limit, display.contentWidth*0.6, display.contentHeight*0.92) 
+	local showLimit = display.newText(limit, display.contentWidth*0.6, display.contentHeight*0.93) 
 	showLimit:setFillColor(0) 
 	showLimit.size = 80
 
@@ -86,7 +98,7 @@ function scene:create( event )
 
 	-- 매대 소환--
 	local out = display.newImage("Content/Image/MainGame/매대.png")
-	out.x, out.y = display.contentWidth*0.95, display.contentHeight*0.54
+	out.x, out.y = display.contentWidth*0.95, display.contentHeight*0.505
 
 	sceneGroup:insert(out)
 
@@ -544,6 +556,9 @@ function scene:create( event )
 	
 	chapstick: addEventListener("touch", putSoda)
 
+	dalgona1.success = true
+	dalgona2.success = true
+
 	-- 국자의 달고나를 판에 올리는 함수 --
 	local function settingD(event)
 		if(event.phase == "began") then
@@ -576,22 +591,34 @@ function scene:create( event )
 						}
 					elseif event.target.sugar == true and event.target.soda == false and event.target.burn == false then
 						print("설탕만")
+
+						dalgona1.success = false
+
 						dalgona1.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나판 설탕만.png"
 						}
 					elseif event.target.sugar == true and event.target.soda == false and event.target.burn == true then
 						print("설탕만, 탐")
+
+						dalgona1.success = false
+
 						dalgona1.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나판 설탕 탐.png"--탄 설탕
 						}
 					elseif event.target.sugar == true and event.target.soda == true and event.target.burn == false and event.target.mix == false then
+						
+						dalgona1.success = false
+
 						dalgona1.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나판 소다덜섞인.png"
 						}
 					elseif event.target.sugar == true and event.target.soda == true and event.target.burn == true then
+						
+						dalgona1.success = false
+
 						dalgona1.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나 덩어리 탐.png"--탄 달고나
@@ -634,21 +661,33 @@ function scene:create( event )
 							filename = "Content/Image/MainGame/달고나 덩어리.png"
 						}
 					elseif event.target.sugar == true and event.target.soda == false and event.target.burn == false then
+						
+						dalgona2.success = false
+
 						dalgona2.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나판 설탕만.png"
 						}
 					elseif event.target.sugar ==true and event.target.soda == false and event.target.burn == true then
+						
+						dalgona2.success = false
+
 						dalgona2.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나판 설탕 탐.png"--탄 설탕
 						}
 					elseif event.target.sugar == true and event.target.soda == true and event.target.burn == false and event.target.mix == false then
+						
+						dalgona2.success = false
+
 						dalgona2.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나판 소다덜섞인.png"
 						}
 					elseif event.target.sugar == true and event.target.soda == true and event.target.burn == true then
+						
+						dalgona2.success = false
+
 						dalgona2.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나 덩어리 탐.png"--탄 달고나
@@ -715,6 +754,7 @@ function scene:create( event )
 
 			if(shapeLimit1 == 0) then
 				-- 시간 경과하면 단단해진 달고나로 --
+				dalgona1.success = false
 				dalgona1.hard = true
 				dalgona1.fill = {
 					type = "image",
@@ -730,6 +770,7 @@ function scene:create( event )
 
 			if(shapeLimit2 == 0) then
 				-- 시간 경과하면 단단해진 달고나로 --
+				dalgona2.success = false
 				dalgona2.hard = true
 				dalgona2.fill = {
 					type = "image",
@@ -826,6 +867,7 @@ function scene:create( event )
 					if(dalgona1.press) then -- 누르기 했음 --
 						if(dalgona1.hard) then
 							 -- 누르고 시간이 지나 굳은 달고나에 모양틀 --
+							dalgona1.success = false
 							dalgona1.fill = {
 								type="image",
 								filename="Content/Image/MainGame/달고나 깨짐.png"
@@ -841,6 +883,7 @@ function scene:create( event )
 						end
 					else -- 누르기 안함 --
 						-- 누르기 전에 모양틀을 눌러 엉망이 된 모습 --
+						dalgona1.success = false
 						dalgona1.fill = {
 							type="image",
 							filename="Content/Image/MainGame/달고나덩어리 모양틀.png"
@@ -859,6 +902,7 @@ function scene:create( event )
 					if(dalgona2.press) then -- 누르기 했음 --
 						if(dalgona2.hard) then
 							 -- 누르고 시간이 지나 굳은 달고나에 모양틀 --
+							dalgona2.success = false
 							dalgona2.fill = {
 								type="image",
 								filename="Content/Image/MainGame/달고나 깨짐.png"
@@ -874,6 +918,7 @@ function scene:create( event )
 						end
 					else -- 누르기 안함 --
 						-- 누르기 전에 모양틀을 눌러 엉망이 된 모습 --
+						dalgona2.success = false
 						dalgona2.fill = {
 							type="image",
 							filename="Content/Image/MainGame/달고나덩어리 모양틀.png"
@@ -901,9 +946,9 @@ function scene:create( event )
 
 	--점수
 	local score = 0
-	local showScore = display.newText(score, display.contentWidth*0.76, display.contentHeight*0.93)
-		showScore:setFillColor(0)
-		showScore.size = 45
+	local showScore = display.newText(score, display.contentWidth*0.85, display.contentHeight*0.93)
+	showScore:setFillColor(0)
+	showScore.size = 80
 	
 
 	flag1=0	
@@ -921,20 +966,27 @@ function scene:create( event )
 			end
 		elseif (event.phase == "ended" or event.phase == "cancelled") then		
 			if(event.target.isFocus) then
-				if event.target.x<out.x+100 and event.target.x>out.x-100
-					and event.target.y<out.y+100 and event.target.y>out.y-100 then
+				if event.target.x<out.x+200 and event.target.x>out.x-200
+					and event.target.y<out.y+1000 and event.target.y>out.y-1000 then
 							
 					event.target.alpha = 0
 
 					event.target.x=event.target.dalgonaX
 					event.target.y=event.target.dalgonaY
 
-
+--[[
 					if (flag1==0) then
 						score = score + 1000
 					elseif(flag2==0)then
 						score = score + 1000
 					end
+					]]--
+
+					if event.target.success then
+						score = score + 1000
+					end
+
+					
 
 					composer.setVariable("score", score)
 

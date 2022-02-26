@@ -83,7 +83,7 @@ function scene:create( event )
 		--composer.setVariable("bgmOn", bgmOn)
 
 
-		composer.gotoScene("game")
+		composer.gotoScene("start")
 	end
 
 	startBtn:addEventListener("tap", start)
