@@ -65,8 +65,10 @@ function scene:create( event )
 	showScore:setFillColor(0)
 	showScore.size = 80
 
+	sceneGroup:insert(showScore)
+
 	-- 전체 타이머 --
-	local limit = 100
+	local limit = 2
 	local showLimit = display.newText(limit, display.contentWidth*0.6, display.contentHeight*0.93) 
 	showLimit:setFillColor(0) 
 	showLimit.size = 80
@@ -91,6 +93,12 @@ function scene:create( event )
 	shelf.x, shelf.y = display.contentWidth*0.442, display.contentHeight*0.171
 
 	sceneGroup:insert(shelf)
+
+	-- 불 --
+	local fire = display.newImage("Content/Image/MainGame/불 합침.png")
+	fire.x, fire.y = display.contentWidth*0.225, display.contentHeight*0.655
+
+	sceneGroup:insert(fire)
 
 	-- 달고나 판 --
 	local plates = display.newGroup()
@@ -134,7 +142,7 @@ function scene:create( event )
 
 	-- 국자 --
 	local ladle1 = display.newImage("Content/Image/MainGame/국자.png")
-	ladle1.ladleX, ladle1.ladleY = display.contentWidth*0.085, display.contentHeight*0.6
+	ladle1.ladleX, ladle1.ladleY = display.contentWidth*0.07, display.contentHeight*0.56
 	ladle1.x, ladle1.y = ladle1.ladleX, ladle1.ladleY
 	
 	ladle1Fill = false -- 국자가 채워진 상태인지 아닌지 구분
@@ -144,7 +152,7 @@ function scene:create( event )
 	ladle1.mix = false
 
 	local ladle2 = display.newImage("Content/Image/MainGame/국자.png")
-	ladle2.ladleX, ladle2.ladleY = display.contentWidth*0.29, display.contentHeight*0.6
+	ladle2.ladleX, ladle2.ladleY = display.contentWidth*0.27, display.contentHeight*0.56
 	ladle2.x, ladle2.y = ladle2.ladleX, ladle2.ladleY
 
 	ladle2Fill = false
@@ -810,7 +818,7 @@ function scene:create( event )
 		elseif( event.phase == "ended" or event.phase == "cancelled" ) then
 			if(event.target.isFocus) then
 				if event.target.x < dalgona1.x + 100 and event.target.x > dalgona1.x - 100
-						and event.target.y < dalgona1.y + 100 and event.target.y > dalgona1.y - 100 then
+						and event.target.y < dalgona1.y + 100 and event.target.y > dalgona1.y - 100 and dalgona1.success then
 
 					-- 달고나 눌러진 이미지로 변경 --
 					dalgona1.press = true
@@ -827,7 +835,7 @@ function scene:create( event )
 					event.target.x = pressBoardX
 					event.target.y = pressBoardyY
 				elseif event.target.x < dalgona2.x + 100 and event.target.x > dalgona2.x - 100
-						and event.target.y < dalgona2.y + 100 and event.target.y > dalgona2.y - 100 then
+						and event.target.y < dalgona2.y + 100 and event.target.y > dalgona2.y - 100 and dalgona2.success then
 
 					-- 달고나 눌러진 이미지로 변경 --
 					dalgona2.press = true

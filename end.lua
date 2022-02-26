@@ -10,8 +10,23 @@ local scene = composer.newScene()
 function scene:create( event )
 	local sceneGroup = self.view
 
-	--local score = composer.getVariable( "score" )
-	local score = 12000
+	local score = composer.getVariable( "score" )
+	--local score = 12000
+
+	-- 브금 --
+	local soundFile = audio.loadSound("Content/Sound/BGM/Happy Bee - Kevin MacLeod.mp3")
+
+	local vol = math.floor(audio.getVolume( { channel=2 } ) * 10)
+	local bgmOn = audio.isChannelPlaying(2)
+
+	composer.setVariable("bgm", bgmOn)
+
+	if (bgmOn) then
+		audio.play(soundFile, {
+		channel = 3,
+		loops = -1})
+		audio.setVolume(vol*0.1, {channel = 3})
+	end
 
 	--배경
 	local background
@@ -181,6 +196,8 @@ function scene:hide( event )
 		-- e.g. stop timers, stop animation, unload sounds, etc.)
 	elseif phase == "did" then
 		-- Called when the scene is now off screen
+
+		audio.pause(3)
 	end
 end
 
