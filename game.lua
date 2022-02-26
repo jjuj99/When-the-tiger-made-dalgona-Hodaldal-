@@ -68,7 +68,7 @@ function scene:create( event )
 	sceneGroup:insert(showScore)
 
 	-- 전체 타이머 --
-	local limit = 2
+	local limit = 200
 	local showLimit = display.newText(limit, display.contentWidth*0.6, display.contentHeight*0.93) 
 	showLimit:setFillColor(0) 
 	showLimit.size = 80
