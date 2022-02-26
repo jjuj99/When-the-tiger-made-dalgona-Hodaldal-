@@ -10,8 +10,16 @@ local scene = composer.newScene()
 function scene:resumeGame(vol)
     --code to resume game
 
-    timer.resumeAll()
+    --timer.resumeAll()
     --timer.resume("gameLimit")
+
+    timer.resume("gameLimit")
+	timer.resume("sugarTimer1")
+	timer.resume("sugarTimer2")
+	timer.resume("sodaTimer1")
+	timer.resume("sodaTimer2")
+	timer.resume("shapeTimer1")
+	timer.resume("shapeTimer2")
 
 end
 
@@ -949,8 +957,16 @@ function scene:create( event )
 
 	-- 일시정지 --
 	local function openPause( event )
-		timer.pauseAll()
+		--timer.pauseAll()
 		--audio.pause(2)
+
+		timer.pause("gameLimit")
+		timer.pause("sugarTimer1")
+		timer.pause("sugarTimer2")
+		timer.pause("sodaTimer1")
+		timer.pause("sodaTimer2")
+		timer.pause("shapeTimer1")
+		timer.pause("shapeTimer2")
 
 		local options = {
 		    isModal = true,
