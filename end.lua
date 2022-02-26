@@ -9,11 +9,66 @@ local scene = composer.newScene()
 
 function scene:create( event )
 	local sceneGroup = self.view
+
+	--local score = composer.getVariable( "score" )
+	local score = 12000
+
+	--배경
+	local background
+
+	if(score >= 10000) then
+		background = display.newImage("Content/Image/Ending/성공.png", display.contentWidth/2, display.contentHeight/2)
+	else
+		background = display.newImage("Content/Image/Ending/실패.png", display.contentWidth/2, display.contentHeight/2)
+	end
+
+	sceneGroup:insert(background)
+
+	-- 점수판 --
+	local money = display.newImage("Content/Image/Ending/엔딩 점수판.png", display.contentWidth/2, display.contentHeight*0.68)
+
+	sceneGroup:insert(money)
+
+	local showScore = display.newText(score, display.contentWidth*0.5, display.contentHeight*0.69)
+	showScore:setFillColor(0)
+	showScore.size = 65
+
+	sceneGroup:insert(showScore)
+
+	--재시작
+	local retry = display.newImage("Content/Image/Ending/엔딩 재시작.png" , display.contentWidth*0.433, display.contentHeight*0.867)
+	retry.width = 369
+	retry.height = 144
+
+	sceneGroup:insert(retry)
+
+	--홈버튼
+	local homeBtn = display.newImage("Content/Image/Ending/엔딩 홈.png" , display.contentWidth*0.644, display.contentHeight*0.867)
+	homeBtn.width = 144
+	homeBtn.height = 144
+
+	sceneGroup:insert(homeBtn)
+
+	--씬 이동
+	local function re(event)
+		composer.gotoScene("game")
+	end
+	retry:addEventListener("tap", re)
+	
+	local function home(event)
+		print("홈")
+		composer.gotoScene("start")
+	end
+	homeBtn:addEventListener("tap", home)
+
+
+	--[[
 	
 	--배경
 	local background = display.newRect( display.contentWidth/2, display.contentHeight/2, display.contentWidth, display.contentHeight)
 	--성공 또는 실패
-	local score = composer.getVariable( "score" )
+	--local score = composer.getVariable( "score" )
+	score = 0
 
 	if(score >= 10000) then
 		local win = display.newImage("Content/Image/Ending/성공.png", display.contentWidth/2, display.contentHeight/2)
@@ -23,25 +78,35 @@ function scene:create( event )
 		money.width = 400
 		money.height = 100
 
+		sceneGroup:insert(win)
+		sceneGroup:insert(money)
 	else
 		local fail = display.newImage("Content/Image/Ending/엔딩화면 예시.png" , display.contentWidth/2, display.contentHeight/2)
 		fail.width = display.contentWidth
 		fail.height = display.contentHeight
+
+		sceneGroup:insert(fail)
 	end
 
 	local showScore = display.newText(score, display.contentWidth*0.5, display.contentHeight*0.69)
 	showScore:setFillColor(0)
 	showScore.size = 65
 
+	sceneGroup:insert(showScore)
 
 	--재시작버튼
 	local retry = display.newImage("Content/Image/Ending/엔딩 재시작.png" , display.contentWidth*0.433, display.contentHeight*0.867)
 	retry.width = 369
 	retry.height = 144
+
+	sceneGroup:insert(retry)
+
 	--엔딩홈버튼
 	local home = display.newImage("Content/Image/Ending/엔딩 홈.png" , display.contentWidth*0.644, display.contentHeight*0.867)
 	home.width = 144
 	home.height = 144
+
+	sceneGroup:insert(home)
 
 	
 	--씬 이동
@@ -75,6 +140,9 @@ function scene:create( event )
 	sceneGroup:insert( background )
 	sceneGroup:insert( title )
 	sceneGroup:insert( summary )
+
+
+	]]--
 
 
 end
