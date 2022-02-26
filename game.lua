@@ -519,10 +519,10 @@ function scene:create( event )
 					event.target.isFocus = false
 
 					if (ladle1.soda == true ) then
-						timer.pause("sugarTimer1")
+						timer.cancel("sugarTimer1")
 					end
 					if (ladle2.soda == true) then
-						timer.pause("sugarTimer2")
+						timer.cancel("sugarTimer2")
 					end
 
 				end
@@ -536,177 +536,159 @@ function scene:create( event )
 
 	-- 국자의 달고나를 판에 올리는 함수 --
 	local function settingD(event)
-		if event.target.soda == true then
-			if(event.phase == "began") then
-				print("settingD start")
-				display.getCurrentStage():setFocus( event.target )
-				event.target.isFocus = true
+		if(event.phase == "began") then
+			print("settingD start")
+			display.getCurrentStage():setFocus( event.target )
+			event.target.isFocus = true
 
-			elseif(event.phase == "moved") then
-				if(event.target.isFocus) then
-					event.target.x = event.xStart + event.xDelta
-					event.target.y = event.yStart + event.yDelta
-				end
+		elseif(event.phase == "moved") then
+			if(event.target.isFocus) then
+				event.target.x = event.xStart + event.xDelta
+				event.target.y = event.yStart + event.yDelta
+			end
 
-			elseif (event.phase == "ended" or event.phase == "cancelled") then
-				if(event.target.isFocus) then
-					--설탕달고나 설탕O, 소다X, 태우기X
-					--설탕탄달고나 설탕O, 소다X, 태우기O
-					--소다덜섞달고나 설탕O, 소다O, 태우기X
-					--소다탄달고나 설탕O, 소다O, 태우기O
-					--왼쪽 판put
-					if event.target.x < plate1.x + 100 and event.target.x > plate1.x - 100
-						and event.target.y < plate1.y + 100 and event.target.y > plate1.y - 100 then
-						
-						dalgona1.alpha = 1
-						if event.target.sugar and event.target.soda and event.target.burn ==false then
-							dalgona1.fill = {
-								type = "image",
-								filename = "Content/Image/MainGame/달고나 덩어리.png"
-							}
-						elseif event.target.sugar and event.target.soda ==false and event.target.burn == false then
-							dalgona1.fill = {
-								type = "image",
-								filename = "Content/Image/MainGame/달고나판 설탕만.png"
-							}
-						elseif event.target.sugar and event.target.soda == false and event.target.burn then
-							dalgona1.fill = {
-								type = "image",
-								filename = "Content/Image/MainGame/"--탄 설탕
-							}
-						elseif event.target.sugar and event.target.soda and event.target.burn == false and event.target.mix == false then
-							dalgona1.fill = {
-								type = "image",
-								filename = "Content/Image/MainGame/달고나판 소다덜섞인.png"
-							}
-						elseif event.target.sugar and event.target.soda and event.target.burn and event.target.mix == false then
-							dalgona1.fill = {
-								type = "image",
-								filename = "Content/Image/MainGame/"--탄 달고나판소더덜섞인
-							}
-						end
-
-						timer.pause("sodaTimer1")
-						print("달고나 놓기")
-
-						dalgona1.x, dalgona1.y = dalgona1.dalgonaX, dalgona1.dalgonaY
-
-						--[[dalgona1.fill = {
+		elseif (event.phase == "ended" or event.phase == "cancelled") then
+			if(event.target.isFocus) then
+				--설탕달고나 설탕O, 소다X, 태우기X
+				--설탕탄달고나 설탕O, 소다X, 태우기O
+				--소다덜섞달고나 설탕O, 소다O, 태우기X
+				--소다탄달고나 설탕O, 소다O, 태우기O
+				--왼쪽 판put
+				if event.target.x < plate1.x + 100 and event.target.x > plate1.x - 100
+					and event.target.y < plate1.y + 100 and event.target.y > plate1.y - 100 then
+					
+					dalgona1.alpha = 1
+					if event.target.sugar == true and event.target.soda == true and event.target.burn == false and event.mix == true then
+						print("달고나 완성")
+						dalgona1.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나 덩어리.png"
 						}
-						]]
-
-						event.target.fill = {
+					elseif event.target.sugar == true and event.target.soda == false and event.target.burn == false then
+						print("설탕만")
+						dalgona1.fill = {
 							type = "image",
-							filename = "Content/Image/MainGame/국자.png"
+							filename = "Content/Image/MainGame/달고나판 설탕만.png"
 						}
+					elseif event.target.sugar == true and event.target.soda == false and event.target.burn == true then
+						print("설탕만, 탐")
+						dalgona1.fill = {
+							type = "image",
+							filename = "Content/Image/MainGame/달고나판 설탕 탐.png"--탄 설탕
+						}
+					elseif event.target.sugar == true and event.target.soda == true and event.target.burn == false and event.target.mix == false then
+						dalgona1.fill = {
+							type = "image",
+							filename = "Content/Image/MainGame/달고나판 소다덜섞인.png"
+						}
+					elseif event.target.sugar == true and event.target.soda == true and event.target.burn == true then
+						dalgona1.fill = {
+							type = "image",
+							filename = "Content/Image/MainGame/달고나 덩어리 탐.png"--탄 달고나
+						}
+					end
 
-						event.target.x = event.target.ladleX
-						event.target.y = event.target.ladleY
+					print("달고나 놓기")
 
-					elseif event.target.x < plate2.x + 100 and event.target.x > plate2.x - 100
-						and event.target.y < plate2.y + 100 and event.target.y > plate2.y - 100 then
-						
-						dalgona2.alpha = 1
-						if event.target.sugar and event.target.soda and event.target.burn ==false then
-							dalgona2.fill = {
-								type = "image",
-								filename = "Content/Image/MainGame/달고나 덩어리.png"
-							}
-						elseif event.target.sugar and event.target.soda == false and event.target.burn == false then
-							dalgona2.fill = {
-								type = "image",
-								filename = "Content/Image/MainGame/달고나판 설탕만.png"
-							}
-						elseif event.target.sugar and event.target.soda == false and event.target.burn then
-							dalgona2.fill = {
-								type = "image",
-								filename = "Content/Image/MainGame/"--탄 설탕
-							}
-						elseif event.target.sugar and event.target.soda and event.target.burn == false and event.target.mix == false then
-							dalgona2.fill = {
-								type = "image",
-								filename = "Content/Image/MainGame/달고나판 소다덜섞인.png"
-							}
-						elseif event.target.sugar and event.target.soda and event.target.burn and event.target.mix == false then
-							dalgona2.fill = {
-								type = "image",
-								filename = "Content/Image/MainGame/"--탄 달고나판소더덜섞인
-							}
-						end
+					dalgona1.x, dalgona1.y = dalgona1.dalgonaX, dalgona1.dalgonaY
 
-						event.target.sugar = false
-						event.target.soda = false
-						event.target.burn = false
+					--[[dalgona1.fill = {
+						type = "image",
+						filename = "Content/Image/MainGame/달고나 덩어리.png"
+					}
+					]]
 
-						timer.pause("sodaTimer2")
-						print("달고나 놓기2")
+					event.target.fill = {
+						type = "image",
+						filename = "Content/Image/MainGame/국자.png"
+					}
 
-						dalgona2.x, dalgona2.y = dalgona2.dalgonaX, dalgona2.dalgonaY
-						--[[
+					event.target.x = event.target.ladleX
+					event.target.y = event.target.ladleY
+
+					if(event.target == ladle1) then
+						timer.cancel("sugarTimer1")
+						timer.cancel("sodaTimer1")
+					elseif(event.target == ladle2) then
+						timer.cancel("sugarTimer2")
+						timer.cancel("sodaTimer2")
+					end
+
+				elseif event.target.x < plate2.x + 100 and event.target.x > plate2.x - 100
+					and event.target.y < plate2.y + 100 and event.target.y > plate2.y - 100 then
+					
+					dalgona2.alpha = 1
+					if event.target.sugar == true and event.target.soda == true and event.target.burn == false and event.target.mix == true then
 						dalgona2.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나 덩어리.png"
 						}
-						]]
-
-						event.target.fill = {
+					elseif event.target.sugar == true and event.target.soda == false and event.target.burn == false then
+						dalgona2.fill = {
 							type = "image",
-							filename = "Content/Image/MainGame/국자.png"
+							filename = "Content/Image/MainGame/달고나판 설탕만.png"
 						}
-
-						event.target.x = event.target.ladleX
-						event.target.y = event.target.ladleY
+					elseif event.target.sugar ==true and event.target.soda == false and event.target.burn == true then
+						dalgona2.fill = {
+							type = "image",
+							filename = "Content/Image/MainGame/달고나판 설탕 탐.png"--탄 설탕
+						}
+					elseif event.target.sugar == true and event.target.soda == true and event.target.burn == false and event.target.mix == false then
+						dalgona2.fill = {
+							type = "image",
+							filename = "Content/Image/MainGame/달고나판 소다덜섞인.png"
+						}
+					elseif event.target.sugar == true and event.target.soda == true and event.target.burn == true then
+						dalgona2.fill = {
+							type = "image",
+							filename = "Content/Image/MainGame/달고나 덩어리 탐.png"--탄 달고나
+						}
 					end
-					--국자 원위치
+
+					print("달고나 놓기2")
+
+					dalgona2.x, dalgona2.y = dalgona2.dalgonaX, dalgona2.dalgonaY
+					--[[
+					dalgona2.fill = {
+						type = "image",
+						filename = "Content/Image/MainGame/달고나 덩어리.png"
+					}
+					]]
+
+					event.target.fill = {
+						type = "image",
+						filename = "Content/Image/MainGame/국자.png"
+					}
+
 					event.target.x = event.target.ladleX
 					event.target.y = event.target.ladleY
 
-					display.getCurrentStage():setFocus(nil)
-					event.target.isFocus = false
+					if(event.target == ladle1) then
+						timer.cancel("sugarTimer1")
+						timer.cancel("sodaTimer1")
+					elseif(event.target == ladle2) then
+						timer.cancel("sugarTimer2")
+						timer.cancel("sodaTimer2")
+					end
 				end
-
-				if (ladle1.soda == true ) then
-					timer.pause("sodaTimer1")
-				end
-				if (ladle2.soda == true) then
-					timer.pause("sodaTimer2")
-				end
-
+				--국자 원위치
 				event.target.x = event.target.ladleX
 				event.target.y = event.target.ladleY
+
+				event.target.sugar = false
+				event.target.soda = false
+				event.target.burn = false
+				event.target.mix = false
 
 				display.getCurrentStage():setFocus(nil)
 				event.target.isFocus = false
 			end
-		else
-			if(event.phase == "began") then
-				print("settingD start")
-				display.getCurrentStage():setFocus( event.target )
-				event.target.isFocus = true
 
-			elseif(event.phase == "moved") then
-				if(event.target.isFocus) then
-					event.target.x = event.xStart + event.xDelta
-					event.target.y = event.yStart + event.yDelta
-				end
-			elseif (event.phase == "ended" or event.phase == "cancelled") then
-				if(event.target.isFocus) then
-					event.target.x = ladle1X
-					event.target.y = ladle1Y
-					print("false: 덜 만듦")
+			event.target.x = event.target.ladleX
+			event.target.y = event.target.ladleY
 
-					display.getCurrentStage():setFocus(nil)
-					event.target.isFocus = false
-				end
-
-				event.target.x = event.target.ladleX
-				event.target.y = event.target.ladleY
-				
-				display.getCurrentStage():setFocus(nil)
-				event.target.isFocus = false
-			end
+			display.getCurrentStage():setFocus(nil)
+			event.target.isFocus = false
 		end
 	end
 
