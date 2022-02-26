@@ -898,7 +898,7 @@ function scene:create( event )
 		showScore.size = 45
 	
 
-		
+	flag1=0	
 	--달고나 
 
 	local function sale( event )
