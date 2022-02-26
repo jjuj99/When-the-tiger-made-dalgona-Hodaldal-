@@ -15,28 +15,45 @@ function scene:create( event )
 	--성공 또는 실패
 	local score = composer.getVariable( "score" )
 	if(score >= 10000) then
-		local win = display.newImage("Content/Image/Ending/성공 배경.png", display.contentWidth/2, display.contentHeight/2)
+		local win = display.newImage("Content/Image/Ending/성공.png", display.contentWidth/2, display.contentHeight/2)
 		win.width = display.contentWidth
 		win.height = display.contentHeight
+		local money = display.newImage("Content/Image/Ending/엔딩 점수판.png", display.contentWidth/2, display.contentHeight*0.68)
+		money.width = 400
+		money.height = 100
 
 	else
-		local fail = display.newImage("Content/Image/Ending/실패 배경.png" , display.contentWidth/2, display.contentHeight/2)
+		local fail = display.newImage("Content/Image/Ending/엔딩화면 예시.png" , display.contentWidth/2, display.contentHeight/2)
 		fail.width = display.contentWidth
 		fail.height = display.contentHeight
 	end
 
-	local showScore = display.newText(score, display.contentWidth*0.8, display.contentHeight*0.66)
+	local showScore = display.newText(score, display.contentWidth*0.5, display.contentHeight*0.69)
 	showScore:setFillColor(0)
-	showScore.size = 100
+	showScore.size = 65
 
 
-	--재시작
-	local retry = display.newImage("Content/Image/Ending/재시작버튼.png" , display.contentWidth*0.77, display.contentHeight*0.83)
+	--재시작버튼
+	local retry = display.newImage("Content/Image/Ending/엔딩 재시작.png" , display.contentWidth*0.433, display.contentHeight*0.867)
+	retry.width = 369
+	retry.height = 144
+	--엔딩홈버튼
+	local home = display.newImage("Content/Image/Ending/엔딩 홈.png" , display.contentWidth*0.644, display.contentHeight*0.867)
+	home.width = 144
+	home.height = 144
 
+	
+	-씬 이동
 	local function re(event)
-		--composer.gotoScene("")
+		composer.gotoScene("game")
 	end
 	retry:addEventListener("tap", re)
+	
+	local function hom(event)
+		composer.gotoScene("start")
+	end
+	retry:addEventListener("tap", hom)
+
 	
 	-- create some text
 	local title = display.newText( "Second View", display.contentCenterX, 125, native.systemFont, 32 )
