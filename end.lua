@@ -11,7 +11,6 @@ function scene:create( event )
 	local sceneGroup = self.view
 
 	local score = composer.getVariable( "score" )
-	--local score = 12000
 
 	-- 브금 --
 	local soundFile = audio.loadSound("Content/Sound/BGM/Happy Bee - Kevin MacLeod.mp3")
