@@ -10,8 +10,7 @@ local scene = composer.newScene()
 function scene:create( event )
 	local sceneGroup = self.view
 
-	--local score = composer.getVariable( "score" )
-	local score = 12000
+	local score = composer.getVariable( "score" )
 
 	--배경
 	local background
