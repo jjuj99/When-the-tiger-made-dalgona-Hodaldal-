@@ -993,6 +993,7 @@ function scene:create( event )
 							
 					event.target.alpha = 0
 
+
 					event.target.x=event.target.dalgonaX
 					event.target.y=event.target.dalgonaY
 
@@ -1007,6 +1008,10 @@ function scene:create( event )
 					if event.target.success then
 						score = score + 1000
 					end
+
+					event.target.success = true
+					event.target.press = false
+					event.target.hard = false
 
 					
 
