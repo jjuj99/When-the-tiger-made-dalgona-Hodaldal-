@@ -11,6 +11,7 @@ function scene:resumeGame(vol)
     --code to resume game
 
     timer.resumeAll()
+    --timer.resume("gameLimit")
 
 end
 
@@ -47,7 +48,7 @@ function scene:create( event )
 	sceneGroup:insert(showLimit)
 
 	local function timeAttack( event )
-		limit = limit -1
+		limit = limit - 1
 		showLimit.text = limit
 		if(limit == 0) then
 			composer.setVariable("complete", false)
@@ -899,6 +900,7 @@ function scene:create( event )
 
 		
 	--달고나 
+
 	local function sale( event )
 
 		if ( event.phase == "began") then
@@ -914,7 +916,12 @@ function scene:create( event )
 				if event.target.x<out.x+100 and event.target.x>out.x-100
 					and event.target.y<out.y+100 and event.target.y>out.y-100 then
 							
-					display.remove(event.target)
+					event.target.alpha = 0
+
+					event.target.x=event.target.dalgonaX
+					event.target.y=event.target.dalgonaY
+
+
 					if (flag1==0) then
 						score = score + 1000
 					elseif(flag2==0)then
@@ -925,15 +932,18 @@ function scene:create( event )
 
 					--점수계산
 					showScore.text = score
+				else
+					event.target.x=event.target.dalgonaX
+					event.target.y=event.target.dalgonaY
 				end
-			else
-				event.target.x=event.xStart
-				event.target.y=event.yStart
+				display.getCurrentStage():setFocus( nil )
+				event.target.isFocus = false
 			end
-
-			
+			display.getCurrentStage():setFocus( nil )
+			event.target.isFocus = false
 		end
 	end
+
 	dalgona1:addEventListener("touch",sale)
 	dalgona2:addEventListener("touch",sale)
 
@@ -991,7 +1001,7 @@ function scene:hide( event )
 
 		audio.pause(2)
 
-		timer.cancelAll()
+		--timer.cancelAll()
 
 	end
 end
