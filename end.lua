@@ -33,21 +33,22 @@ function scene:create( event )
 	showScore.size = 65
 
 
-	--재시작
+	--재시작버튼
 	local retry = display.newImage("Content/Image/Ending/엔딩 재시작.png" , display.contentWidth*0.433, display.contentHeight*0.867)
 	retry.width = 369
 	retry.height = 144
-
-	local function re(event)
-		composer.gotoScene("game")
-	end
-	retry:addEventListener("tap", re)
-
-	--엔딩홈
+	--엔딩홈버튼
 	local home = display.newImage("Content/Image/Ending/엔딩 홈.png" , display.contentWidth*0.644, display.contentHeight*0.867)
 	home.width = 144
 	home.height = 144
 
+	
+	-씬 이동
+	local function re(event)
+		composer.gotoScene("game")
+	end
+	retry:addEventListener("tap", re)
+	
 	local function hom(event)
 		composer.gotoScene("start")
 	end
