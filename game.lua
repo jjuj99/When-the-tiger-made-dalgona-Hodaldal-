@@ -403,7 +403,7 @@ function scene:create( event )
 				if(sodaTime1 == 6) then
 					ladle1.fill = {
 						type = "image",
-						filename = "Content/Image/MainGame/국자 소나 녹는중.png"
+						filename = "Content/Image/MainGame/국자 소다 녹는중.png"
 					}
 	
 				elseif(sodaTime1 == 3) then
@@ -432,7 +432,7 @@ function scene:create( event )
 				if(sodaTime2 == 6) then
 					ladle2.fill = {
 						type = "image",
-						filename = "Content/Image/MainGame/국자 소나 녹는중.png"
+						filename = "Content/Image/MainGame/국자 소다 녹는중.png"
 					}
 	
 				elseif(sodaTime2 == 3) then
