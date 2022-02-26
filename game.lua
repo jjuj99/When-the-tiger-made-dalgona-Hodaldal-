@@ -967,7 +967,7 @@ function scene:create( event )
 
 	-- 일시정지 --
 	local function openPause( event )
-		timer.pause("gameLimit")
+		timer.pauseAll()
 		--audio.pause(2)
 
 		local options = {

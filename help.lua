@@ -18,7 +18,7 @@ function scene:create( event )
 	helpView.x, helpView.y = display.contentWidth*0.5, display.contentHeight*0.5
 
 	local xView = display.newImage(helpGruop, "Content/Image/Start/옵션창 X.png")
-	xView.x, xView.y = display.contentWidth*0.924, display.contentHeight*0.128
+	xView.x, xView.y = display.contentWidth*0.917, display.contentHeight*0.128
 
 	sceneGroup:insert(helpGruop)
 

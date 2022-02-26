@@ -36,7 +36,7 @@ function scene:create( event )
 	local function continue( event )
 		--audio.resume(2)
 		audio.rewind( { channel=2 } )
-		timer.resume("gameLimit")
+		timer.resumeAll()
 		composer.hideOverlay( "fade", 400 )
 	end
 
