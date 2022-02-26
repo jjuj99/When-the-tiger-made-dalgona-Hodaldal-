@@ -10,11 +10,28 @@ local scene = composer.newScene()
 function scene:create( event )
 	local sceneGroup = self.view
 
-	--실패 엔딩
-	local background = display.newImage("Content/Image/Ending/실패 배경.png" , display.contentWidth/2, display.contentHeight/2)
-	background.width = display.contentWidth
-	background.height = display.contentHeight
+	
+local composer = require( "composer" )
+local scene = composer.newScene()
 
+function scene:create( event )
+	local sceneGroup = self.view
+
+	--배경
+	local background = display.newRect( display.contentWidth/2, display.contentHeight/2, display.contentWidth, display.contentHeight)
+
+	--성공 또는 실패
+	if(flag1== 0 and flag2==0) then
+		local win = display.newImage("Content/Image/Ending/성공 배경.png", display.contentWidth/2, display.contentHeight/2)
+		win.width = display.contentWidth
+		win.height = display.contentHeight
+
+	else
+		local fail = display.newImage("Content/Image/Ending/실패 배경.png" , display.contentWidth/2, display.contentHeight/2)
+		fail.width = display.contentWidth
+		fail.height = display.contentHeight
+	end
+		
 	--점수
 	local score = 123456
 	local showScore = display.newText(score, display.contentWidth*0.8, display.contentHeight*0.66)
@@ -25,9 +42,10 @@ function scene:create( event )
 	local retry = display.newImage("Content/Image/Ending/재시작버튼.png" , display.contentWidth*0.77, display.contentHeight*0.83)
 
 	local function re(event)
-		--composer.gotoScene("")
+		--composer.gotoScene("")  --여기에 넣기
 	end
 	retry:addEventListener("tap", re)
+	
 	
 	-- create some text
 	local title = display.newText( "Second View", display.contentCenterX, 125, native.systemFont, 32 )

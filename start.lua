@@ -7,8 +7,6 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-v = "@@@"
-
 function scene:resumeGame()
     --code to resume game
 end

@@ -14,7 +14,7 @@ function scene:create( event )
 
 	local helpGruop = display.newGroup()
 
-	local helpView = display.newImage(helpGruop, "Content/Image/Start/설명창 예시.png")
+	local helpView = display.newImage(helpGruop, "Content/Image/Start/설명창.png")
 	helpView.x, helpView.y = display.contentWidth*0.5, display.contentHeight*0.5
 
 	local xView = display.newImage(helpGruop, "Content/Image/Start/옵션창 X.png")

@@ -89,6 +89,7 @@ function scene:create( event )
 	dalgona1.press = false
 	dalgona1.hard = false
 
+
 	sceneGroup: insert(dalgona1)
 
 	local dalgona2 = display.newImage("Content/Image/MainGame/달고나 덩어리.png")
@@ -109,6 +110,8 @@ function scene:create( event )
 	
 	ladle1.sugar = true -- 국자가 채워진 상태인지 아닌지 구분
 	ladle1.soda = false
+	ladle1.burn = false
+	ladle1.mix = false
 
 	local ladle2 = display.newImage("Content/Image/MainGame/국자.png")
 	ladle2.ladleX, ladle2.ladleY = display.contentWidth*0.29, display.contentHeight*0.6
@@ -116,6 +119,8 @@ function scene:create( event )
 
 	ladle2.sugar = true
 	ladle2.soda = false
+	ladle2.burn = false
+	ladle2.mix = false
 
 	sceneGroup:insert(ladle1)
 	sceneGroup:insert(ladle2)
@@ -143,11 +148,10 @@ function scene:create( event )
 	chapstickX, chapstickY = display.contentWidth * 0.5, display.contentHeight * 0.165
 	chapstick.x, chapstick.y = chapstickX, chapstickY
 
-	chapstick.alpha = 0.5
-
 	local chapstickSoda = false --젓가락에 소다가 찍혔는지 판정하는 파라미터
 
 	sceneGroup: insert(chapstick)
+	chapstick:toBack()
 
 	-- 누름판 소환 --
 	local pressBoard = display.newImage("Content/Image/MainGame/누름판.png")
@@ -164,6 +168,59 @@ function scene:create( event )
 	sceneGroup:insert(shapeFrame)
 
 	-- *** 동작 *** --
+
+	--설탕 녹는+타는 함수--
+	local sugarTime1 = 10
+	local function meltSugar1(event)
+		if(sugarTime1 >= 0) then
+			sugarTime1 = sugarTime1 - 1
+
+			if(sugarTime1 == 7) then
+				ladle1.fill = {
+					type = "image",
+					filename = "Content/Image/MainGame/국자 덜녹음.png"
+				}
+
+			elseif(sugarTime1 == 4) then
+				ladle1.fill = {
+					type = "image",
+					filename = "Content/Image/MainGame/국자 설탕녹음.png"
+				}
+			elseif(sugarTime1 < 0) then
+				ladle1.burn = true
+				ladle1.fill = {
+					type = "image",
+					filename = "Content/Image/MainGame/국자 설탕 탐.png"
+				}
+			end
+		end
+	end
+
+	local sugarTime2 = 10
+	local function meltSugar2(event)
+		if(sugarTime2 >= 0) then
+			sugarTime2 = sugarTime2 - 1
+
+			if(sugarTime2 == 7) then
+				ladle2.fill = {
+					type = "image",
+					filename = "Content/Image/MainGame/국자 덜녹음.png"
+				}
+
+			elseif(sugarTime2 == 4) then
+				ladle2.fill = {
+					type = "image",
+					filename = "Content/Image/MainGame/국자 설탕녹음.png"
+				}
+			elseif(sugarTime2 < 0) then
+				ladle2.burn = true
+				ladle2.fill = {
+					type = "image",
+					filename = "Content/Image/MainGame/국자 설탕 탐.png"
+				}
+			end
+		end
+	end
 
 	-- 설탕붓기 --
 	local function catchFillSugar( event )
@@ -185,6 +242,41 @@ function scene:create( event )
 						type = "image",
 						filename = "Content/Image/MainGame/국자 설탕.png"
 					}
+					--[[
+					--시간 설정--
+					local limit = 4
+
+					local function timeAttack( event )
+						limit = limit -1
+
+						-- 설탕 덜 녹음--
+						if(limit == 2) then
+							ladle1.fill = {
+								type="image",
+								filename="Content/Image/MainGame/국자 덜녹음.png"
+						    }
+						end
+
+						--설탕 녹음 -- 
+						if(limit == 0) then
+							ladle1.fill = {
+								type="image",
+								filename="Content/Image/MainGame/국자 설탕녹음.png"
+							}
+						end
+
+					end
+					timer.performWithDelay( 1000, timeAttack, 0 )
+
+					ladle1.fill = { 
+						type = "image",
+						filename = "Content/Image/MainGame/국자 설탕.png"
+					}
+					]]
+
+					-- 시간제한 시작 --
+					sugarTime1 = 10
+					timer.performWithDelay( 1000, meltSugar1, 0	, "sugarTimer1")
 
 					-- 설탕 원위치 --
 					event.target.x = sugarX
@@ -195,10 +287,39 @@ function scene:create( event )
 				elseif event.target.x < ladle2.x + 200 and event.target.x > ladle2.x - 200
 						and event.target.y < ladle2.y + 200 and event.target.y > ladle2.y - 200 then
 
+					--시간 설정--
+					local limit = 4
+
 					ladle2.fill = { 
 						type = "image",
 						filename = "Content/Image/MainGame/국자 설탕.png"
 					}
+					--[[
+					local function timeAttack( event )
+						limit = limit -1
+
+						-- 설탕 덜 녹음--
+						if(limit == 2) then
+							ladle2.fill = {
+								type="image",
+								filename="Content/Image/MainGame/국자 덜녹음.png"
+						    }
+						end
+
+						--설탕 녹음 -- 
+						if(limit == 0) then
+							ladle2.fill = {
+								type="image",
+								filename="Content/Image/MainGame/국자 설탕녹음.png"
+							}
+						end
+					end
+					timer.performWithDelay( 1000, timeAttack, 0 )
+					]]
+
+					-- 시간제한 시작 --
+					sugarTime2 = 10
+					timer.performWithDelay( 1000, meltSugar2, 0 , "sugarTimer2")
 
 					-- 설탕 원위치 --
 					event.target.x = sugarX
@@ -230,7 +351,7 @@ function scene:create( event )
 				display.getCurrentStage():setFocus( event.target )
 
 				event.target.isFocus = true
-				chapstick.alpha = 1
+				chapstick: toFront()
 
 			elseif(event.phase == "moved") then
 				if(event.target.isFocus) then
@@ -255,7 +376,7 @@ function scene:create( event )
 						--다른 곳에 젓가락을 놓으면 원래 자리로
 						event.target.x = chapstickX
 						event.target.y = chapstickY
-						chapstick.alpha = 0.5
+						chapstick:toBack()
 
 						print("False location")
 					end
@@ -269,6 +390,65 @@ function scene:create( event )
 	end
 	
 	chapstick: addEventListener("touch", pickSoda)
+
+	--소다가 녹는+타는 함수--
+	local sodaTime1 = 9
+	local function meltSoda1(event)
+		if(ladle1.sugar == true and ladle1.burn == false) then
+			if(sodaTime1 >= 0) then
+				sodaTime1 = sodaTime1 - 1
+	
+				if(sodaTime1 == 6) then
+					ladle1.fill = {
+						type = "image",
+						filename = "Content/Image/MainGame/국자 소나 녹는중.png"
+					}
+	
+				elseif(sodaTime1 == 3) then
+					ladle2.mix = true
+					ladle1.fill = {
+						type = "image",
+						filename = "Content/Image/MainGame/국자 달고나.png"
+					}
+	
+				elseif(sodaTime1 == 0) then
+					ladle1.burn = true
+					ladle1.fill = {
+						type = "image",
+						filename = "Content/Image/MainGame/국자 달고나 탐.png"
+					}
+				end
+			end
+		end
+	end
+	local sodaTime2 = 9
+	local function meltSoda2(event)
+		if(ladle2.sugar == true and ladle2.burn == false) then
+			if(sodaTime2 >= 0) then
+				sodaTime2 = sodaTime2 - 1
+	
+				if(sodaTime2 == 6) then
+					ladle2.fill = {
+						type = "image",
+						filename = "Content/Image/MainGame/국자 소나 녹는중.png"
+					}
+	
+				elseif(sodaTime2 == 3) then
+					ladle2.mix = true
+					ladle2.fill = {
+						type = "image",
+						filename = "Content/Image/MainGame/국자 달고나.png"
+					}
+				elseif(sodaTime2 == 0) then
+					ladle2.burn = true
+					ladle2.fill = {
+						type = "image",
+						filename = "Content/Image/MainGame/국자 달고나 탐.png"
+					}
+				end
+			end
+		end
+	end
 
 	--젓가락에 소다가 묻었을 때만 실행되는 소다 투입 함수
 	local function putSoda(event)
@@ -286,6 +466,7 @@ function scene:create( event )
 
 			elseif (event.phase == "ended" or event.phase == "cancelled") then
 				if(event.target.isFocus) then
+					--국자1
 					if event.target.x < ladle1.x + 300 and event.target.x > ladle1.x - 300
 							and event.target.y < ladle1.y + 300 and event.target.y > ladle1.y - 300  and ladle1.sugar == true then
 					 	chapstickSoda = false
@@ -293,41 +474,39 @@ function scene:create( event )
 
 						print("Put soda")
 
+						-- 시간제한 시작 --
+						sodaTime1 = 9
+						timer.performWithDelay( 1000, meltSoda1, 0 , "sodaTimer1")
+
 						--소다 투입 후 젓가락 자리로
 						event.target.x = chapstickX
 						event.target.y = chapstickY
 
-						chapstick.alpha = 0.5
+						chapstick:toBack()
 						chapstick.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/젓가락.png"
 						}
-
-						ladle1.fill = {
-							type = "image",
-							filename = "Content/Image/MainGame/국자 달고나.png"
-						}
-
+					--국자2
 					elseif event.target.x < ladle2.x + 300 and event.target.x > ladle2.x - 300
-							and event.target.y < ladle2.y + 300 and event.target.y > ladle2.y - 300  and ladle2.sugar == true then
+						and event.target.y < ladle2.y + 300 and event.target.y > ladle2.y - 300  and ladle2.sugar == true then
 					 	chapstickSoda = false
 					 	ladle2.soda = true
 
 						print("Put soda")
 
+						-- 시간제한 시작 --
+						sodaTime2 = 9
+						timer.performWithDelay( 1000, meltSoda2, 0 , "sodaTimer2")
+
 						--소다 투입 후 젓가락 자리로
 						event.target.x = chapstickX
 						event.target.y = chapstickY
 
-						chapstick.alpha = 0.5
+						chapstick:toBack()
 						chapstick.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/젓가락.png"
-						}
-
-						ladle2.fill = {
-							type = "image",
-							filename = "Content/Image/MainGame/국자 달고나.png"
 						}
 
 					else
@@ -338,6 +517,14 @@ function scene:create( event )
 					end
 					display.getCurrentStage():setFocus(nil)
 					event.target.isFocus = false
+
+					if (ladle1.soda == true ) then
+						timer.pause("sugarTimer1")
+					end
+					if (ladle2.soda == true) then
+						timer.pause("sugarTimer2")
+					end
+
 				end
 				display.getCurrentStage():setFocus(nil)
 				event.target.isFocus = false
@@ -363,45 +550,106 @@ function scene:create( event )
 
 			elseif (event.phase == "ended" or event.phase == "cancelled") then
 				if(event.target.isFocus) then
-					-- 왼쪽 판 --
+					--설탕달고나 설탕O, 소다X, 태우기X
+					--설탕탄달고나 설탕O, 소다X, 태우기O
+					--소다덜섞달고나 설탕O, 소다O, 태우기X
+					--소다탄달고나 설탕O, 소다O, 태우기O
+					--왼쪽 판put
 					if event.target.x < plate1.x + 100 and event.target.x > plate1.x - 100
 						and event.target.y < plate1.y + 100 and event.target.y > plate1.y - 100 then
-						event.target.soda = false
+						
 						dalgona1.alpha = 1
-						event.target.sugar = false
+						if event.target.sugar and event.target.soda and event.target.burn ==false then
+							dalgona1.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/달고나 덩어리.png"
+							}
+						elseif event.target.sugar and event.target.soda ==false and event.target.burn == false then
+							dalgona1.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/달고나판 설탕만.png"
+							}
+						elseif event.target.sugar and event.target.soda == false and event.target.burn then
+							dalgona1.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/"--탄 설탕
+							}
+						elseif event.target.sugar and event.target.soda and event.target.burn == false and event.target.mix == false then
+							dalgona1.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/달고나판 소다덜섞인.png"
+							}
+						elseif event.target.sugar and event.target.soda and event.target.burn and event.target.mix == false then
+							dalgona1.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/"--탄 달고나판소더덜섞인
+							}
+						end
 
+						timer.pause("sodaTimer1")
 						print("달고나 놓기")
 
 						dalgona1.x, dalgona1.y = dalgona1.dalgonaX, dalgona1.dalgonaY
 
-						dalgona1.fill = {
+						--[[dalgona1.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나 덩어리.png"
 						}
+						]]
 
 						event.target.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/국자.png"
 						}
-						--이후 코드 보고 수정
 
 						event.target.x = event.target.ladleX
 						event.target.y = event.target.ladleY
-					-- 오른쪽 판 --
+
 					elseif event.target.x < plate2.x + 100 and event.target.x > plate2.x - 100
 						and event.target.y < plate2.y + 100 and event.target.y > plate2.y - 100 then
-						event.target.soda = false
+						
 						dalgona2.alpha = 1
-						event.target.sugar = false
+						if event.target.sugar and event.target.soda and event.target.burn ==false then
+							dalgona2.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/달고나 덩어리.png"
+							}
+						elseif event.target.sugar and event.target.soda == false and event.target.burn == false then
+							dalgona2.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/달고나판 설탕만.png"
+							}
+						elseif event.target.sugar and event.target.soda == false and event.target.burn then
+							dalgona2.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/"--탄 설탕
+							}
+						elseif event.target.sugar and event.target.soda and event.target.burn == false and event.target.mix == false then
+							dalgona2.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/달고나판 소다덜섞인.png"
+							}
+						elseif event.target.sugar and event.target.soda and event.target.burn and event.target.mix == false then
+							dalgona2.fill = {
+								type = "image",
+								filename = "Content/Image/MainGame/"--탄 달고나판소더덜섞인
+							}
+						end
 
+						event.target.sugar = false
+						event.target.soda = false
+						event.target.burn = false
+
+						timer.pause("sodaTimer2")
 						print("달고나 놓기2")
 
 						dalgona2.x, dalgona2.y = dalgona2.dalgonaX, dalgona2.dalgonaY
-
+						--[[
 						dalgona2.fill = {
 							type = "image",
 							filename = "Content/Image/MainGame/달고나 덩어리.png"
 						}
+						]]
 
 						event.target.fill = {
 							type = "image",
@@ -417,6 +665,13 @@ function scene:create( event )
 
 					display.getCurrentStage():setFocus(nil)
 					event.target.isFocus = false
+				end
+
+				if (ladle1.soda == true ) then
+					timer.pause("sodaTimer1")
+				end
+				if (ladle2.soda == true) then
+					timer.pause("sodaTimer2")
 				end
 
 				event.target.x = event.target.ladleX
@@ -657,7 +912,35 @@ function scene:create( event )
 		if ( event.phase == "began") then
 			display.getCurrentStage():setFocus( event.target )
 			event.target.isFocus = true
+		elseif(event.phase == "moved") then
+			if(event.target.isFocus) then
+				event.target.x = event.xStart + event.xDelta
+				event.target.y = event.yStart + event.yDelta
+			end
+		elseif (event.phase == "ended" or event.phase == "cancelled") then		
+			if(event.target.isFocus) then
+				if event.target.x<out.x+100 and event.target.x>out.x-100
+					and event.target.y<out.y+100 and event.target.y>out.y-100 then
+					
+					composer.setVariable(flag1)
+					display.remove(event.target)
+					--composer.gotoScene("end")
+				end
+			else
+				event.target.x=event.xStart
+				event.target.y=event.yStart
+			end
+		end
+	end
 
+	dalgona1:addEventListener("touch",sale)
+
+	
+	--달고나2제출 후 엔딩씬
+	local function sale2( event )
+		if ( event.phase == "began") then
+			display.getCurrentStage():setFocus( event.target )
+			event.target.isFocus = true
 		elseif(event.phase == "moved") then
 			if(event.target.isFocus) then
 				event.target.x = event.xStart + event.xDelta
@@ -668,29 +951,19 @@ function scene:create( event )
 				if event.target.x<out.x+100 and event.target.x>out.x-100
 					and event.target.y<out.y+100 and event.target.y>out.y-100 then
 							
-					--display.remove(event.target)
-					--composer.gotoScene("end", "fade")
-					--composer.gotoScene("end")
-
-					event.target.alpha = 0
-
-					event.target.x=event.target.dalgonaX
-					event.target.y=event.target.dalgonaY
-				else
-					event.target.x=event.target.dalgonaX
-					event.target.y=event.target.dalgonaY
-					
+					display.remove(event.target)
+					composer.setVariable(flag2)
+					composer.gotoScene("end")
 				end
-				display.getCurrentStage():setFocus( nil )
-				event.target.isFocus = false
+			else
+				event.target.x=event.xStart
+				event.target.y=event.yStart
 			end
-			display.getCurrentStage():setFocus( nil )
-			event.target.isFocus = false
 		end
 	end
+	dalgona2:addEventListener("touch",sale2)
 
-	dalgona1:addEventListener("touch",sale)
-	dalgona2:addEventListener("touch",sale)
+
 
 	-- 일시정지 --
 	local function openPause( event )
